@@ -1,0 +1,20 @@
+[
+  {
+    "id": 0,
+    "name": "Category 0",
+    "image": "assets/images/bookcase0.png",
+    "description": "Category 0 description"
+  },
+  {
+    "id": 1,
+    "name": "Category name 1",
+    "image": "assets/images/bookcase1.png",
+    "description": "Category 1 description"
+  },
+  {
+    "id": 2,
+    "name": "Category name 2",
+    "image": "assets/images/bookcase2.png",
+    "description": "Category 2 description"
+  }
+]

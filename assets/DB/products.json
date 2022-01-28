@@ -1,0 +1,23 @@
+[
+  {
+    "id": 0,
+    "name": "book name 0",
+    "image": "assets/images/book0.jpg",
+    "description": "book 0 description",
+    "category": 0
+  },
+  {
+    "id": 1,
+    "name": "book name 1",
+    "image": "assets/images/book1.jpg",
+    "description": "book 1 description",
+    "category": 1
+  },
+  {
+    "id": 2,
+    "name": "book name 2",
+    "image": "assets/images/book2.jpg",
+    "description": "book 2 description",
+    "category": 0
+  }
+]
