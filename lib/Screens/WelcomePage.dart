@@ -13,6 +13,8 @@ final List<String> imgList = [
   'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
 ];
 
+const durationImg = 3;
+
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
 
@@ -28,8 +30,8 @@ class _WelcomePageState extends State<WelcomePage> {
   }
 
   startTime() async {
-    var duration = new Duration(seconds: imgList.length * 3);
-    return new Timer(duration, route);
+    var duration = Duration(seconds: imgList.length * durationImg);
+    return Timer(duration, route);
   }
 
   route() {
@@ -47,7 +49,7 @@ class _WelcomePageState extends State<WelcomePage> {
             height: MediaQuery.of(context).size.height,
             viewportFraction: 1,
             autoPlay: true,
-            autoPlayInterval: Duration(seconds: 3),
+            autoPlayInterval: const Duration(seconds: durationImg),
           ),
           items: imgList
               .map((item) => Container(
