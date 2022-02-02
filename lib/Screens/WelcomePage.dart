@@ -31,7 +31,8 @@ class _WelcomePageState extends State<WelcomePage> {
 
   startTime() async {
     var duration = Duration(seconds: imgList.length * durationImg);
-    return Timer(duration, route);
+    Timer timerSkip = Timer(duration, route);
+    return timerSkip;
   }
 
   route() {
@@ -44,23 +45,37 @@ class _WelcomePageState extends State<WelcomePage> {
     return Scaffold(
       body: Builder(builder: (context) {
         final double height = MediaQuery.of(context).size.height;
-        return CarouselSlider(
-          options: CarouselOptions(
-            height: MediaQuery.of(context).size.height,
-            viewportFraction: 1,
-            autoPlay: true,
-            autoPlayInterval: const Duration(seconds: durationImg),
+        return Container(
+          child: Stack(
+            alignment: Alignment.topRight,
+            children: <Widget>[
+              CarouselSlider(
+                options: CarouselOptions(
+                  height: MediaQuery.of(context).size.height,
+                  viewportFraction: 1,
+                  autoPlay: true,
+                  autoPlayInterval: const Duration(seconds: durationImg),
+                ),
+                items: imgList
+                    .map((item) => Container(
+                          child: Center(
+                              child: Image.network(
+                            item,
+                            fit: BoxFit.cover,
+                            height: height,
+                          )),
+                        ))
+                    .toList(),
+              ),
+              IconButton(
+                onPressed: () {
+                  route();
+                },
+                icon: const Icon(Icons.close),
+                iconSize: 60,
+              ),
+            ],
           ),
-          items: imgList
-              .map((item) => Container(
-                    child: Center(
-                        child: Image.network(
-                      item,
-                      fit: BoxFit.cover,
-                      height: height,
-                    )),
-                  ))
-              .toList(),
         );
       }),
     );
