@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1008891094706",
+    "project_id": "loyaltyapp-340218",
+    "storage_bucket": "loyaltyapp-340218.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008891094706:android:fbaf84f98a6abd1a2c4bab",
+        "android_client_info": {
+          "package_name": "appeiron.tech.testing"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1008891094706-hlur6282flu4d8bdfqr24hoo9sul5kan.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDV4z2M8ABtFMXRv_JMn8_QXb-boc7jElo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1008891094706-hlur6282flu4d8bdfqr24hoo9sul5kan.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
