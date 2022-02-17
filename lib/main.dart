@@ -6,6 +6,7 @@ import 'package:testing/Screens/BusinessInfo.dart';
 import 'package:testing/Screens/GamifyProgram.dart';
 import 'package:testing/Screens/LoginScreen.dart';
 import 'package:testing/Screens/MainMenu.dart';
+import 'package:testing/Screens/OnboardingScreen.dart';
 import 'package:testing/Screens/SignInScreen.dart';
 import 'package:testing/Screens/WelcomePage.dart';
 
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
       // home: const MainMenu(),
       initialRoute: '/',
       routes: {
-        '/': (ctx) => MainMenu(),
+        '/': (ctx) => OnboardingScreen(),
         // '/': (ctx) => WelcomePage(),
         // '/': (ctx) => LoginScreen(),
         ProductList.routeName: (ctx) => ProductList(),
