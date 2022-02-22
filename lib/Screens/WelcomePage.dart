@@ -1,5 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:testing/Models/AnnouncementModel.dart';
+import 'package:testing/Models/ClientModel.dart';
+import 'package:testing/Resources/firestore_methods.dart';
 import 'dart:async';
 
 import 'package:testing/Screens/MainMenu.dart';
@@ -21,10 +24,29 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
+  int _current = 0;
+  String clientId = "6R6uxrX1jQaAuvZQ4WEl";
+  String activeCampaignId = '';
+  List<AnnouncementModel> listAnnouncements = [];
+  String typeAd = 'WELCOME';
+
   @override
   void initState() {
     super.initState();
+    getImages();
     startTime();
+  }
+
+  getImages() async {
+    // get client active campaigns
+    ClientModel currentClient = await FirestoreMethods.getClient(clientId);
+    activeCampaignId = currentClient.activesCampaignId[0];
+
+    // get active announcements urls
+    listAnnouncements =
+        await FirestoreMethods.getAnnouncements(activeCampaignId, typeAd);
+
+    setState(() {});
   }
 
   startTime() async {
@@ -54,15 +76,18 @@ class _WelcomePageState extends State<WelcomePage> {
                   autoPlay: true,
                   autoPlayInterval: const Duration(seconds: durationImg),
                 ),
-                items: imgList
-                    .map((item) => Container(
-                          child: Center(
-                              child: Image.network(
-                            item,
+                items: listAnnouncements
+                    .map(
+                      (item) => Container(
+                        child: Center(
+                          child: Image.network(
+                            item.image,
                             fit: BoxFit.cover,
                             height: height,
-                          )),
-                        ))
+                          ),
+                        ),
+                      ),
+                    )
                     .toList(),
               ),
               IconButton(

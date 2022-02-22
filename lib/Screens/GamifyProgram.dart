@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:testing/Widgets/Carousel.dart';
 
 final List<String> imgList = [
   'https://picsum.photos/500/500',
@@ -242,15 +243,7 @@ class _GamifyProgramState extends State<GamifyProgram>
           children: <Widget>[
             Text('Special Announcements', style: TextStyle(fontSize: 20)),
             Expanded(
-              child: CarouselSlider(
-                options: CarouselOptions(),
-                items: imgList
-                    .map((item) => Container(
-                          child: Center(
-                              child: Image.network(item, fit: BoxFit.cover)),
-                        ))
-                    .toList(),
-              ),
+              child: Carousel(typeAd: 'GAMIFY'),
             ),
           ],
         ));
@@ -259,7 +252,7 @@ class _GamifyProgramState extends State<GamifyProgram>
         height: 150,
         child: Column(
           children: <Widget>[
-            Text('Gift', style: TextStyle(fontSize: 20)),
+            const Text('Gift', style: TextStyle(fontSize: 20)),
             Expanded(
               child: CarouselSlider(
                 options: CarouselOptions(),

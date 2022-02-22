@@ -38,8 +38,8 @@ class MyApp extends StatelessWidget {
       // home: const MainMenu(),
       initialRoute: '/',
       routes: {
-        '/': (ctx) => OnboardingScreen(),
-        // '/': (ctx) => WelcomePage(),
+        // '/': (ctx) => OnboardingScreen(),
+        '/': (ctx) => WelcomePage(),
         // '/': (ctx) => LoginScreen(),
         ProductList.routeName: (ctx) => ProductList(),
         BusinessInfo.routeName: (ctx) => BusinessInfo(),

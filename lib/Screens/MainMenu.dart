@@ -24,12 +24,13 @@ class MainMenu extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<MainMenu>{
-
+class _HomePageState extends State<MainMenu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Loyalty App'),),
+      appBar: AppBar(
+        title: const Text('Loyalty App'),
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -40,8 +41,8 @@ class _HomePageState extends State<MainMenu>{
               children: <Widget>[
                 Expanded(
                   child: Container(
-                      alignment: Alignment.center,
-                      child: Carousel()
+                    alignment: Alignment.center,
+                    child: Carousel(typeAd: 'MENU'),
                   ),
                 ),
               ],
