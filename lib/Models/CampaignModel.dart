@@ -5,7 +5,7 @@ class CampaignModel {
   String clientId = '';
   String title = '';
   String description = '';
-  int createdAt = 0;
+  late DateTime createdAt;
   bool active = false;
 
   CampaignModel({
@@ -25,7 +25,7 @@ class CampaignModel {
       clientId: snapshot["clientId"],
       title: snapshot["title"],
       description: snapshot["description"],
-      createdAt: snapshot["createdAt"],
+      createdAt: snapshot["createdAt"].toDate(),
       active: snapshot["active"],
     );
   }

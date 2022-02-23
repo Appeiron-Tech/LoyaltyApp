@@ -7,7 +7,7 @@ class AnnouncementModel {
   String type = '';
   String description = '';
   String image = '';
-  DateTime createdAt;
+  late DateTime createdAt;
   String title = '';
   bool active = false;
 

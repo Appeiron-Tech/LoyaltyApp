@@ -1,9 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:testing/Models/AnnouncementModel.dart';
 import 'package:testing/Models/ClientModel.dart';
+import 'package:testing/Utils/globalVariables.dart';
+
+import '../Models/CategoryModel.dart';
 
 class FirestoreMethods {
-  static FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  static Future<String> getCoverUrl() async {
+    QuerySnapshot querySnap = await _firestore
+        .collection('covers')
+        .where('clientId', isEqualTo: clientId)
+        .get();
+    var data = querySnap.docs[0].data() as Map<String, dynamic>;
+    return data['image'];
+  }
 
   static Future<ClientModel> getClient(String clientId) async {
     DocumentSnapshot snap =
@@ -24,5 +36,18 @@ class FirestoreMethods {
       listAnnouncements.add(AnnouncementModel.fromSnap(document));
     });
     return listAnnouncements;
+  }
+
+  static Future<List<CategoryModel>> getCategories(String clientId) async {
+    List<CategoryModel> listCategories = [];
+    QuerySnapshot querySnap = await _firestore
+        .collection('categories')
+        .where('clientId', isEqualTo: clientId)
+        .orderBy('order')
+        .get();
+    querySnap.docs.forEach((document) {
+      listCategories.add(CategoryModel.fromSnap(document));
+    });
+    return listCategories;
   }
 }
