@@ -1,56 +1,61 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class User {
+class UserModel {
   final String uid;
   final String email;
-  final String nombres;
-  final String apellidos;
-  final String telefono;
-  final String direccion;
-  final String referencia;
-  final String ciudad;
-  final String distrito;
-  final String provincia;
+  final String name;
+  final String lastName;
+  final String phone;
+  final String address;
+  final String reference;
+  final String city;
+  final String district;
+  final String province;
+  final String clientId;
 
-  User(
-      {required this.uid,
-      required this.email,
-      required this.nombres,
-      required this.apellidos,
-      required this.telefono,
-      required this.direccion,
-      required this.referencia,
-      required this.ciudad,
-      required this.distrito,
-      required this.provincia});
+  UserModel({
+    required this.uid,
+    required this.clientId,
+    required this.email,
+    required this.name,
+    required this.lastName,
+    required this.phone,
+    required this.address,
+    required this.reference,
+    required this.city,
+    required this.district,
+    required this.province,
+  });
 
-  static User fromSnap(DocumentSnapshot snap) {
+  static UserModel fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
 
-    return User(
+    return UserModel(
       uid: snapshot["uid"],
       email: snapshot["email"],
-      nombres: snapshot["nombre"],
-      apellidos: snapshot["apellidos"],
-      telefono: snapshot["telefono"],
-      direccion: snapshot["direccion"],
-      referencia: snapshot["referencia"],
-      ciudad: snapshot["ciudad"],
-      distrito: snapshot["distrito"],
-      provincia: snapshot["provincia"],
+      name: snapshot["name"],
+      lastName: snapshot["lastName"],
+      phone: snapshot["phone"],
+      address: snapshot["address"],
+      reference: snapshot["reference"],
+      city: snapshot["city"],
+      district: snapshot["district"],
+      province: snapshot["province"],
+      clientId: snapshot["clientId"],
     );
   }
 
   Map<String, dynamic> toJson() => {
         "uid": uid,
+        "name": name,
+        "lastName": lastName,
         "email": email,
-        "nombres": nombres,
-        "apellidos": apellidos,
-        "telefono": telefono,
-        "direccion": direccion,
-        "referencia": referencia,
-        "ciudad": ciudad,
-        "distrito": distrito,
-        "provincia": provincia,
+        "phone": phone,
+        "address": address,
+        "reference": reference,
+        "city": city,
+        "district": district,
+        "province": province,
+        "clientId": clientId
       };
 }

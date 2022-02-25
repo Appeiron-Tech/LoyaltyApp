@@ -1,15 +1,40 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class ProductModel {
-  int id = -1;
-  String name = "";
-  String image = "";
-  String description = "";
+  String uid = '';
+  String categoryId = '';
+  String clientId = '';
+  String name = '';
+  num offerPctg = 0.0;
+  num price = 0.0;
+  String image = '';
+  String description = '';
+  num order = 0;
 
-  ProductModel({required this.id, required this.name, required this.image, required this.description});
+  ProductModel({
+    required this.uid,
+    required this.name,
+    required this.image,
+    required this.description,
+    required this.categoryId,
+    required this.clientId,
+    required this.offerPctg,
+    required this.price,
+    required this.order,
+  });
 
-  ProductModel.fromJson(Map<String, dynamic> json){
-    id = json['id'];
-    name = json['name'];
-    image = json['image'];
-    description = json['description'];
+  static ProductModel fromSnap(DocumentSnapshot snap) {
+    var snapshot = snap.data() as Map<String, dynamic>;
+    return ProductModel(
+      uid: snapshot['uid'],
+      categoryId: snapshot['categoryId'],
+      clientId: snapshot['clientId'],
+      name: snapshot['name'],
+      offerPctg: snapshot['offerPctg'],
+      price: snapshot['price'],
+      image: snapshot['image'],
+      description: snapshot['description'],
+      order: snapshot['order'],
+    );
   }
 }

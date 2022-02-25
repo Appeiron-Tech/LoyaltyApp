@@ -1,8 +1,15 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:testing/Models/GiftModel.dart';
+import 'package:testing/Models/OfferModel.dart';
+import 'package:testing/Resources/auth_methods.dart';
+import 'package:testing/Resources/firestore_methods.dart';
+import 'package:testing/Utils/utils.dart';
 import 'package:testing/Widgets/Carousel.dart';
+import '../Models/UserModel.dart';
 
 final List<String> imgList = [
   'https://picsum.photos/500/500',
@@ -79,18 +86,45 @@ class GamifyProgram extends StatefulWidget {
 
 class _GamifyProgramState extends State<GamifyProgram>
     with SingleTickerProviderStateMixin {
+  bool isLoading = false;
+  List<OfferModel> offers = [];
+  List<GiftModel> gifts = [];
   late TabController _qrController;
+  UserModel? currentsUser;
 
   @override
   void initState() {
+    _qrController = TabController(length: 2, vsync: this);
+    getData();
     super.initState();
-    _qrController = new TabController(length: 2, vsync: this);
+  }
+
+  getData() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      String userId = FirebaseAuth.instance.currentUser!.uid;
+
+      currentsUser = await AuthMethods().getUserDetails();
+      offers = await FirestoreMethods().getOffers(userId);
+      gifts = await FirestoreMethods().getGifts(userId);
+
+      setState(() {});
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     Widget qrModal = Container(
-      padding: EdgeInsets.only(top: 30, bottom: 10),
+      padding: const EdgeInsets.only(top: 30, bottom: 10),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -99,58 +133,52 @@ class _GamifyProgramState extends State<GamifyProgram>
             child: TabBarView(
               controller: _qrController,
               children: <Widget>[
-                Container(
-                  child: Column(
-                    children: [
-                      Text(
-                        'Escanear código',
-                        style: Theme.of(context).textTheme.headline1,
-                      ),
-                      QrImage(
-                        data: "1234567890",
-                        version: QrVersions.auto,
-                        size: 250.0,
-                      ),
-                      Text('1234567890',
-                          style: Theme.of(context).textTheme.bodyText1),
-                      SizedBox(height: 20),
-                      Text('Ten en cuenta que tu codigo termina en 34:00'),
-                    ],
-                  ),
+                Column(
+                  children: [
+                    Text(
+                      'Escanear código',
+                      style: Theme.of(context).textTheme.headline1,
+                    ),
+                    QrImage(
+                      data: "1234567890",
+                      version: QrVersions.auto,
+                      size: 250.0,
+                    ),
+                    Text('1234567890',
+                        style: Theme.of(context).textTheme.bodyText1),
+                    const SizedBox(height: 20),
+                    const Text('Ten en cuenta que tu codigo termina en 34:00'),
+                  ],
                 ),
-                Container(
-                  child: Column(
-                    children: [
-                      Text(
-                        'Indicar código',
-                        style: Theme.of(context).textTheme.headline1,
-                      ),
-                      Text('1234567890',
-                          style: Theme.of(context).textTheme.bodyText1),
-                      SizedBox(height: 20),
-                      Text('Ten en cuenta que tu codigo termina en 34:00'),
-                    ],
-                  ),
+                Column(
+                  children: [
+                    Text(
+                      'Indicar código',
+                      style: Theme.of(context).textTheme.headline1,
+                    ),
+                    Text('1234567890',
+                        style: Theme.of(context).textTheme.bodyText1),
+                    const SizedBox(height: 20),
+                    const Text('Ten en cuenta que tu codigo termina en 34:00'),
+                  ],
                 ),
               ],
             ),
           ),
-          Container(
-            child: TabBar(
-              labelColor: Colors.black,
-              labelStyle: Theme.of(context).textTheme.headline6,
-              controller: _qrController,
-              tabs: const [
-                Tab(
-                  icon: Icon(null),
-                  text: 'Scan QR',
-                ),
-                Tab(
-                  icon: Icon(null),
-                  text: 'Indicar codigo',
-                ),
-              ],
-            ),
+          TabBar(
+            labelColor: Colors.black,
+            labelStyle: Theme.of(context).textTheme.headline6,
+            controller: _qrController,
+            tabs: const [
+              Tab(
+                icon: Icon(null),
+                text: 'Scan QR',
+              ),
+              Tab(
+                icon: Icon(null),
+                text: 'Indicar codigo',
+              ),
+            ],
           ),
         ],
       ),
@@ -163,8 +191,7 @@ class _GamifyProgramState extends State<GamifyProgram>
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Image.network(
-                "https://images.pexels.com/photos/8305725/pexels-photo-8305725.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"),
+            Image.network("https://picsum.photos/200"),
             const SizedBox(height: 10),
             Text('${products[index]["name"]}'),
             const Text('Oferta valida hasta el 23/01/22'),
@@ -204,8 +231,7 @@ class _GamifyProgramState extends State<GamifyProgram>
 
     final userSection = Container(
       margin: const EdgeInsets.all(10),
-      color: Colors.red,
-      child: new Row(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         textBaseline: TextBaseline.ideographic,
         children: <Widget>[
@@ -213,25 +239,24 @@ class _GamifyProgramState extends State<GamifyProgram>
             width: 40,
             height: 50,
             color: Colors.purple,
-            child: Center(
-              child: new Text('a', style: TextStyle(fontSize: 20)),
+            child: const Center(
+              child: Text('a', style: TextStyle(fontSize: 20)),
             ),
           ),
           Expanded(
             child: Container(
-              color: Colors.blue,
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text('Gabriela Vega'),
-                    Text('Gabriela Vega'),
+                    Text(currentsUser?.name ?? "Name"),
+                    Text('Subtitulo'),
                   ]),
             ),
           ),
           Container(
             color: Colors.grey,
-            child: new Text('70', style: TextStyle(fontSize: 40)),
+            child: Text('70', style: TextStyle(fontSize: 40)),
           ),
         ],
       ),
@@ -256,12 +281,10 @@ class _GamifyProgramState extends State<GamifyProgram>
             Expanded(
               child: CarouselSlider(
                 options: CarouselOptions(),
-                items: imgList
-                    .map((item) => Container(
-                          child: Center(
-                              child: Image.network(item,
-                                  fit: BoxFit.cover, width: 1000)),
-                        ))
+                items: gifts
+                    .map((item) => Center(
+                        child: Image.network(item.image,
+                            fit: BoxFit.cover, width: 1000)))
                     .toList(),
               ),
             ),
@@ -270,56 +293,82 @@ class _GamifyProgramState extends State<GamifyProgram>
 
     final offersGrid = GridView.count(
       mainAxisSpacing: 10,
-      crossAxisSpacing: 20,
+      crossAxisSpacing: 10,
       shrinkWrap: true,
       physics: const BouncingScrollPhysics(),
       crossAxisCount: 2,
-      children: List.generate(products.length, (index) {
+      children: offers.map((offer) {
         return GestureDetector(
           onTap: () {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return _buildPopupDialog(context, index);
-                });
+            // showDialog(
+            //     context: context,
+            //     builder: (BuildContext context) {
+            //       return _buildPopupDialog(context, index);
+            //     });
           },
-          child: GridTile(
+          child: Material(
+            elevation: 2,
+            borderRadius: const BorderRadius.all(Radius.circular(15)),
             child: Container(
+              clipBehavior: Clip.hardEdge,
               height: 40,
-              color: Colors.green,
-              child: Center(
-                child: Text(
-                  products[index]['name'],
-                ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Colors.white,
+              ),
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(offer.title,
+                            style: Theme.of(context).textTheme.headline4),
+                        const SizedBox(height: 5),
+                        Text(offer.description,
+                            style: Theme.of(context).textTheme.bodyText1),
+                        const SizedBox(height: 10),
+                        Text("S/. 9.00",
+                            style: Theme.of(context).textTheme.headline6),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
         );
-      }),
+      }).toList(),
     );
 
     final routeArgs =
         ModalRoute.of(context)?.settings.arguments as Map<String, String>;
     print(routeArgs);
     final title = routeArgs['title'];
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Gamify Program'),
-      ),
-      body: Column(
-        children: [
-          userSection,
-          Expanded(
-            child: ListView(
+
+    return isLoading
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : Scaffold(
+            appBar: AppBar(
+              title: const Text('Gamify Program'),
+            ),
+            body: Column(
               children: [
-                specialAdCarrousel,
-                giftCarrousel,
-                offersGrid,
+                userSection,
+                Expanded(
+                  child: ListView(
+                    children: [
+                      specialAdCarrousel,
+                      giftCarrousel,
+                      offersGrid,
+                    ],
+                  ),
+                ),
               ],
             ),
-          ),
-        ],
-      ),
-    );
+          );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:testing/Resources/auth_methods.dart';
 import 'package:testing/Screens/GamifyProgram.dart';
+import 'package:testing/Utils/globalVariables.dart';
 import 'package:testing/Utils/utils.dart';
 
 class SignInPage extends StatefulWidget {
@@ -49,14 +50,15 @@ class _SignInPageState extends State<SignInPage> {
     String res = await AuthMethods().signUpUser(
       email: _emailController.text,
       password: _passwordController.text,
-      nombres: _nombreController.text,
-      apellidos: _apellidoController.text,
-      telefono: _telefonoController.text,
-      direccion: _direccionController.text,
-      referencia: _referenciaController.text,
-      distrito: _distritoController.text,
-      ciudad: _ciudadController.text,
-      provincia: _provinciaController.text,
+      name: _nombreController.text,
+      lastName: _apellidoController.text,
+      phone: _telefonoController.text,
+      address: _direccionController.text,
+      reference: _referenciaController.text,
+      district: _distritoController.text,
+      city: _ciudadController.text,
+      province: _provinciaController.text,
+      clientId: clientId,
     );
 
     // verificar la respuesta

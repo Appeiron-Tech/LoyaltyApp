@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class OfferModel {
+class GiftModel {
   String uid = '';
   String clientId = '';
   String idCategory = '';
@@ -8,39 +8,39 @@ class OfferModel {
   String description = '';
   String image = '';
   late DateTime createdAt;
-  num expirationDays = 0;
+  int expirationDays = 0;
   String productId = '';
   List requirements = [];
 
-  OfferModel({
+  GiftModel({
     required this.uid,
     required this.clientId,
     required this.idCategory,
     required this.title,
-    required this.image,
     required this.description,
+    required this.image,
     required this.createdAt,
     required this.expirationDays,
-    required this.productId,
     required this.requirements,
+    required this.productId,
   });
 
-  OfferModel.fromJson(Map<String, dynamic> json) {
+  GiftModel.fromJson(Map<String, dynamic> json) {
     uid = json['uid'];
     clientId = json['clientId'];
     idCategory = json['idCategory'];
     title = json['title'];
-    image = json['image'];
     description = json['description'];
-    createdAt = json['createdAt'].toDate();
+    image = json['image'];
+    createdAt = json['createdAt'];
     expirationDays = json['expirationDays'];
-    productId = json['productId'];
     requirements = json['requirements'];
+    productId = json['productId'];
   }
 
-  static OfferModel fromSnap(DocumentSnapshot snap) {
+  static GiftModel fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
-    return OfferModel(
+    return GiftModel(
       uid: snapshot['uid'],
       clientId: snapshot['clientId'],
       idCategory: snapshot['idCategory'],
