@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:testing/Models/GamifyModel.dart';
 import 'package:testing/Models/GiftModel.dart';
 import 'package:testing/Models/OfferModel.dart';
 import 'package:testing/Resources/auth_methods.dart';
@@ -10,13 +11,6 @@ import 'package:testing/Resources/firestore_methods.dart';
 import 'package:testing/Utils/utils.dart';
 import 'package:testing/Widgets/Carousel.dart';
 import '../Models/UserModel.dart';
-
-final List<String> imgList = [
-  'https://picsum.photos/500/500',
-  'https://picsum.photos/500/500',
-  'https://picsum.photos/500/500',
-  'https://picsum.photos/500/500',
-];
 
 final List<Map<String, dynamic>> products = [
   {
@@ -91,6 +85,7 @@ class _GamifyProgramState extends State<GamifyProgram>
   List<GiftModel> gifts = [];
   late TabController _qrController;
   UserModel? currentsUser;
+  GamifyModel? gamify;
 
   @override
   void initState() {
@@ -110,6 +105,7 @@ class _GamifyProgramState extends State<GamifyProgram>
       currentsUser = await AuthMethods().getUserDetails();
       offers = await FirestoreMethods().getOffers(userId);
       gifts = await FirestoreMethods().getGifts(userId);
+      gamify = await FirestoreMethods().getGamify(userId);
 
       setState(() {});
     } catch (e) {
@@ -239,8 +235,11 @@ class _GamifyProgramState extends State<GamifyProgram>
             width: 40,
             height: 50,
             color: Colors.purple,
-            child: const Center(
-              child: Text('a', style: TextStyle(fontSize: 20)),
+            child: Center(
+              child: Text(
+                gamify?.level.toString() ?? '0',
+                style: const TextStyle(fontSize: 20),
+              ),
             ),
           ),
           Expanded(
@@ -256,7 +255,8 @@ class _GamifyProgramState extends State<GamifyProgram>
           ),
           Container(
             color: Colors.grey,
-            child: Text('70', style: TextStyle(fontSize: 40)),
+            child: Text(gamify?.points.toString() ?? '0',
+                style: const TextStyle(fontSize: 40)),
           ),
         ],
       ),
@@ -344,12 +344,12 @@ class _GamifyProgramState extends State<GamifyProgram>
 
     final routeArgs =
         ModalRoute.of(context)?.settings.arguments as Map<String, String>;
-    print(routeArgs);
+
     final title = routeArgs['title'];
 
     return isLoading
         ? const Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(backgroundColor: Colors.white),
           )
         : Scaffold(
             appBar: AppBar(

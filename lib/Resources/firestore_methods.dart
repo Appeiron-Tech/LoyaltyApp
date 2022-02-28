@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:testing/Models/AnnouncementModel.dart';
 import 'package:testing/Models/ClientModel.dart';
+import 'package:testing/Models/GamifyModel.dart';
 import 'package:testing/Models/GiftModel.dart';
 import 'package:testing/Models/OfferModel.dart';
 import 'package:testing/Models/ProductModel.dart';
@@ -105,5 +106,13 @@ class FirestoreMethods {
     }
 
     return list;
+  }
+
+  Future<GamifyModel> getGamify(String idUser) async {
+    QuerySnapshot snap = await _firestore
+        .collection('gamify')
+        .where('idUser', isEqualTo: idUser)
+        .get();
+    return GamifyModel.fromSnap(snap.docs[0]);
   }
 }
