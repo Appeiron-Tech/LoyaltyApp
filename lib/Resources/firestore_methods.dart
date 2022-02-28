@@ -5,6 +5,7 @@ import 'package:testing/Models/GamifyModel.dart';
 import 'package:testing/Models/GiftModel.dart';
 import 'package:testing/Models/OfferModel.dart';
 import 'package:testing/Models/ProductModel.dart';
+import 'package:testing/Models/StoreModel.dart';
 import 'package:testing/Utils/globalVariables.dart';
 
 import '../Models/CategoryModel.dart';
@@ -114,5 +115,17 @@ class FirestoreMethods {
         .where('idUser', isEqualTo: idUser)
         .get();
     return GamifyModel.fromSnap(snap.docs[0]);
+  }
+
+  Future<List<StoreModel>> getStores() async {
+    List<StoreModel> list = [];
+    QuerySnapshot querySnap = await _firestore
+        .collection('stores')
+        .where('clientId', isEqualTo: clientId)
+        .get();
+    for (var document in querySnap.docs) {
+      list.add(StoreModel.fromSnap(document));
+    }
+    return list;
   }
 }
