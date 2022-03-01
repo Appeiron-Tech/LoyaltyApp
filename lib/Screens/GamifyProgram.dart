@@ -8,6 +8,7 @@ import 'package:testing/Models/GiftModel.dart';
 import 'package:testing/Models/OfferModel.dart';
 import 'package:testing/Resources/auth_methods.dart';
 import 'package:testing/Resources/firestore_methods.dart';
+import 'package:testing/Screens/MainMenu.dart';
 import 'package:testing/Utils/utils.dart';
 import 'package:testing/Widgets/Carousel.dart';
 import '../Models/UserModel.dart';
@@ -115,6 +116,13 @@ class _GamifyProgramState extends State<GamifyProgram>
     setState(() {
       isLoading = false;
     });
+  }
+
+  void logout() async {
+    await FirebaseAuth.instance.signOut();
+
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => MainMenu()));
   }
 
   @override
@@ -250,6 +258,12 @@ class _GamifyProgramState extends State<GamifyProgram>
                   children: <Widget>[
                     Text(currentsUser?.name ?? "Name"),
                     Text('Subtitulo'),
+                    TextButton(
+                      onPressed: () {
+                        logout();
+                      },
+                      child: Text("LOG OUT"),
+                    ),
                   ]),
             ),
           ),
