@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:testing/Resources/firestore_methods.dart';
 
@@ -27,7 +28,7 @@ class _HeaderState extends State<Header> {
       height: 160,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: NetworkImage(coverURL),
+          image: CachedNetworkImageProvider(coverURL),
           fit: BoxFit.cover,
         ),
       ),

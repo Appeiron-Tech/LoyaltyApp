@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:testing/Models/CategoryModel.dart';
@@ -90,7 +91,9 @@ class _ProductListState extends State<ProductList> {
                 Row(
                   children: <Widget>[
                     Image(
-                      image: NetworkImage(_categoriesProduct[index].image),
+                      image: CachedNetworkImageProvider(
+                        _categoriesProduct[index].image,
+                      ),
                       height: 65,
                       width: 65,
                     ),
@@ -196,9 +199,11 @@ class _ProductListState extends State<ProductList> {
                                       //   color: Colors.white,
                                       // ),
                                       CircleAvatar(
-                                        backgroundImage: NetworkImage(
-                                            _currentProducts[index].image),
+                                        backgroundImage:
+                                            CachedNetworkImageProvider(
+                                                _currentProducts[index].image),
                                       ),
+
                                       const SizedBox(width: 21),
                                       Expanded(
                                         child: Column(

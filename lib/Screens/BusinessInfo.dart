@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:testing/Resources/firestore_methods.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:testing/Utils/utils.dart';
 
 class BusinessInfo extends StatefulWidget {
@@ -48,7 +49,10 @@ class _BusinessInfoState extends State<BusinessInfo> {
           return ListTile(
             title: Text(stores[index].district),
             leading: CircleAvatar(
-                backgroundImage: NetworkImage(stores[index].images[0])),
+              backgroundImage: CachedNetworkImageProvider(
+                stores[index].images[0],
+              ),
+            ),
             trailing: const Text('Metadata'),
           );
         });
