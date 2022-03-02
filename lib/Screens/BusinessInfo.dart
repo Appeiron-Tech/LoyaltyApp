@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:testing/Resources/firestore_methods.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:testing/Screens/StoreDetailScreen.dart';
 import 'package:testing/Utils/utils.dart';
 
 class BusinessInfo extends StatefulWidget {
@@ -47,6 +48,14 @@ class _BusinessInfoState extends State<BusinessInfo> {
         itemCount: stores.length,
         itemBuilder: (context, index) {
           return ListTile(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) =>
+                      StoreDetailPage(storeModel: stores[index]),
+                ),
+              );
+            },
             title: Text(stores[index].district),
             leading: CircleAvatar(
               backgroundImage: CachedNetworkImageProvider(

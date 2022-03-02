@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -195,7 +196,7 @@ class _GamifyProgramState extends State<GamifyProgram>
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Image.network("https://picsum.photos/200"),
+            CachedNetworkImage(imageUrl: "https://picsum.photos/200"),
             const SizedBox(height: 10),
             Text('${products[index]["name"]}'),
             const Text('Oferta valida hasta el 23/01/22'),
@@ -297,8 +298,10 @@ class _GamifyProgramState extends State<GamifyProgram>
                 options: CarouselOptions(),
                 items: gifts
                     .map((item) => Center(
-                        child: Image.network(item.image,
-                            fit: BoxFit.cover, width: 1000)))
+                        child: CachedNetworkImage(
+                            imageUrl: item.image,
+                            fit: BoxFit.cover,
+                            width: 1000)))
                     .toList(),
               ),
             ),

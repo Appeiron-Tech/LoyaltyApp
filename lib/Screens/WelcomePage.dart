@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:testing/Models/AnnouncementModel.dart';
@@ -80,8 +81,8 @@ class _WelcomePageState extends State<WelcomePage> {
                     .map(
                       (item) => Container(
                         child: Center(
-                          child: Image.network(
-                            item.image,
+                          child: CachedNetworkImage(
+                            imageUrl: item.image,
                             fit: BoxFit.cover,
                             height: height,
                           ),
