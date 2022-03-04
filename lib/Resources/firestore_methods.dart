@@ -1,12 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:testing/Models/AnnouncementModel.dart';
+import 'package:testing/Models/AnswerModel.dart';
 import 'package:testing/Models/ClientModel.dart';
 import 'package:testing/Models/GamifyModel.dart';
 import 'package:testing/Models/GiftModel.dart';
 import 'package:testing/Models/OfferModel.dart';
 import 'package:testing/Models/ProductModel.dart';
+import 'package:testing/Models/QuestionModel.dart';
 import 'package:testing/Models/StoreModel.dart';
+import 'package:testing/Models/SurveyModel.dart';
 import 'package:testing/Utils/globalVariables.dart';
+import 'package:uuid/uuid.dart';
 
 import '../Models/CategoryModel.dart';
 
@@ -127,5 +131,39 @@ class FirestoreMethods {
       list.add(StoreModel.fromSnap(document));
     }
     return list;
+  }
+
+  Future<List<QuestionModel>> getQuestions() async {
+    List<QuestionModel> list = [];
+    QuerySnapshot querySnap = await _firestore
+        .collection('questions')
+        .where('clientId', isEqualTo: clientId)
+        .where('surveyId', isEqualTo: surveyId)
+        .get();
+    for (var document in querySnap.docs) {
+      list.add(QuestionModel.fromSnap(document));
+    }
+    return list;
+  }
+
+  Future<String> uploadAnswer(String idQuestion, String text) async {
+    String res = "Some error occurred";
+    try {
+      String answerId = Uuid().v1();
+
+      AnswerModel answer = AnswerModel(
+        uid: answerId,
+        questionId: idQuestion,
+        text: text,
+        createdAt: DateTime.now(),
+        surveyId: surveyId,
+      );
+
+      _firestore.collection('answers').doc(answerId).set(answer.toJson());
+      res = answerId;
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
   }
 }
