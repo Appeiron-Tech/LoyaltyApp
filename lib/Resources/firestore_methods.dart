@@ -166,4 +166,32 @@ class FirestoreMethods {
     }
     return res;
   }
+
+  Future<String> updateUser(
+    String uid,
+    String name,
+    String lastName,
+    String phone,
+    String address,
+    String reference,
+    String district,
+    String city,
+    String province,
+  ) async {
+    String res = "Some error occurred";
+    try {
+      _firestore.collection('users').doc(uid).update({'name': name});
+      _firestore.collection('users').doc(uid).update({'lastName': lastName});
+      _firestore.collection('users').doc(uid).update({'phone': phone});
+      _firestore.collection('users').doc(uid).update({'address': address});
+      _firestore.collection('users').doc(uid).update({'reference': reference});
+      _firestore.collection('users').doc(uid).update({'district': district});
+      _firestore.collection('users').doc(uid).update({'city': city});
+      _firestore.collection('users').doc(uid).update({'province': province});
+      res = "Sucess";
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:testing/Models/QuestionModel.dart';
 import 'package:testing/Resources/firestore_methods.dart';
 
@@ -25,9 +26,6 @@ class _SurveyPageState extends State<SurveyPage> {
     for (var question in questions) {
       answerControllers.add(TextEditingController());
     }
-    print(questions.length);
-    print(answerControllers.length);
-
     setState(() {});
   }
 
@@ -40,48 +38,81 @@ class _SurveyPageState extends State<SurveyPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextFormField(
-                controller: answerControllers[0],
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter some text';
+              // TextFormField(
+              //   controller: answerControllers[0],
+              //   validator: (value) {
+              //     if (value == null || value.isEmpty) {
+              //       return 'Please enter some text';
+              //     }
+              //     return null;
+              //   },
+              //   decoration: InputDecoration(
+              //     icon: Icon(Icons.favorite),
+              //     labelText: questions[0].text,
+              //   ),
+              // ),
+              // SizedBox(height: 10),
+              // TextFormField(
+              //   controller: answerControllers[1],
+              //   validator: (value) {
+              //     if (value == null || value.isEmpty) {
+              //       return 'Please enter some text';
+              //     }
+              //     return null;
+              //   },
+              //   decoration: InputDecoration(
+              //     icon: Icon(Icons.favorite),
+              //     labelText: questions[1].text,
+              //   ),
+              // ),
+              // SizedBox(height: 10),
+              // TextFormField(
+              //   controller: answerControllers[2],
+              //   validator: (value) {
+              //     if (value == null || value.isEmpty) {
+              //       return 'Please enter some text';
+              //     }
+              //     return null;
+              //   },
+              //   decoration: InputDecoration(
+              //     icon: Icon(Icons.favorite),
+              //     labelText: questions[2].text,
+              //   ),
+              // ),
+              // SizedBox(height: 10),
+              ListView.builder(
+                itemCount: questions.length,
+                itemBuilder: (context, index) {
+                  late Widget element;
+                  if (questions[index].type == "TEXT") {
+                    element = TextFormField(
+                      controller: answerControllers[index],
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.favorite),
+                        labelText: questions[index].text,
+                      ),
+                    );
+                  } else if (questions[index].type == "SCALE") {
+                    element = RatingBar.builder(
+                      initialRating: 3,
+                      minRating: 1,
+                      direction: Axis.horizontal,
+                      allowHalfRating: true,
+                      itemCount: 5,
+                      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      itemBuilder: (context, _) => const Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                      onRatingUpdate: (rating) {
+                        print(rating);
+                      },
+                    );
                   }
-                  return null;
+
+                  return element;
                 },
-                decoration: InputDecoration(
-                  icon: Icon(Icons.favorite),
-                  labelText: questions[0].text,
-                ),
               ),
-              SizedBox(height: 10),
-              TextFormField(
-                controller: answerControllers[1],
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter some text';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  icon: Icon(Icons.favorite),
-                  labelText: questions[1].text,
-                ),
-              ),
-              SizedBox(height: 10),
-              TextFormField(
-                controller: answerControllers[2],
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter some text';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  icon: Icon(Icons.favorite),
-                  labelText: questions[2].text,
-                ),
-              ),
-              SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: ElevatedButton(

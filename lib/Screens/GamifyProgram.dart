@@ -11,6 +11,7 @@ import 'package:testing/Resources/auth_methods.dart';
 import 'package:testing/Resources/firestore_methods.dart';
 import 'package:testing/Screens/MainMenu.dart';
 import 'package:testing/Screens/SurveyScreen.dart';
+import 'package:testing/Screens/UserScreen.dart';
 import 'package:testing/Utils/utils.dart';
 import 'package:testing/Widgets/Carousel.dart';
 import '../Models/UserModel.dart';
@@ -391,6 +392,16 @@ class _GamifyProgramState extends State<GamifyProgram>
                           );
                         },
                         child: Text('Survey'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => UserPage(),
+                            ),
+                          );
+                        },
+                        child: Text('Profile'),
                       ),
                     ],
                   ),
