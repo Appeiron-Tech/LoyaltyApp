@@ -9,6 +9,7 @@ import 'package:testing/Models/GiftModel.dart';
 import 'package:testing/Models/OfferModel.dart';
 import 'package:testing/Resources/auth_methods.dart';
 import 'package:testing/Resources/firestore_methods.dart';
+import 'package:testing/Screens/GamifyDetailsScreen.dart';
 import 'package:testing/Screens/MainMenu.dart';
 import 'package:testing/Screens/SurveyScreen.dart';
 import 'package:testing/Screens/UserScreen.dart';
@@ -402,6 +403,16 @@ class _GamifyProgramState extends State<GamifyProgram>
                           );
                         },
                         child: Text('Profile'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => GamifyDetailsPage(),
+                            ),
+                          );
+                        },
+                        child: Text('My level'),
                       ),
                     ],
                   ),

@@ -1,9 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:testing/Screens/GamifyProgram.dart';
 import 'package:testing/Screens/LoginScreen.dart';
 import 'package:testing/Screens/ProductList.dart';
 import 'package:testing/Screens/SignInScreen.dart';
+import 'package:testing/Utils/globalVariables.dart';
 
 class MenuOption extends StatelessWidget {
   final String title;
@@ -42,21 +44,40 @@ class MenuOption extends StatelessWidget {
       onTap: () => routeParam == GamifyProgram.routeName
           ? verifyUser(context)
           : selectItem(context),
-      splashColor: Theme.of(context).primaryColor,
-      borderRadius: BorderRadius.circular(15),
       child: Container(
         padding: const EdgeInsets.all(10),
-        child: Text(
-          title,
-          style: Theme.of(context).textTheme.headline1,
+        child: Card(
+          elevation: 10,
+          shadowColor: shadowColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 140.0,
+                height: 90.0,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: CachedNetworkImageProvider(
+                      'https://picsum.photos/500/500',
+                    ),
+                  ),
+                  borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Text(
+                  title,
+                  style: Theme.of(context).textTheme.headline2,
+                ),
+              ),
+            ],
+          ),
         ),
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [color.withOpacity(0.6), color],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.circular(12)),
       ),
     );
   }

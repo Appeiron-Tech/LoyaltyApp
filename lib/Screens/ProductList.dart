@@ -71,15 +71,15 @@ class _ProductListState extends State<ProductList> {
                 _categoriesProduct[index].uid, _categoriesProduct[index].title);
           },
           child: Container(
-            width: 251,
+            height: 120,
             margin: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
-            padding: const EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(10.0),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(20),
               color: Colors.white,
               boxShadow: const [
                 BoxShadow(
-                  color: Colors.blueGrey,
+                  color: shadowColor,
                   blurRadius: 7.0,
                   offset: Offset(0, 2),
                 ),
@@ -88,33 +88,16 @@ class _ProductListState extends State<ProductList> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Image(
-                      image: CachedNetworkImageProvider(
-                        _categoriesProduct[index].image,
-                      ),
-                      height: 65,
-                      width: 65,
-                    ),
-                    const Spacer(),
-                    const CircleAvatar(
-                      backgroundImage: AssetImage("assets/images/book1.jpg"),
-                    ),
-                    const CircleAvatar(
-                        backgroundImage: AssetImage("assets/images/book2.jpg")),
-                    const CircleAvatar(
-                        backgroundImage: AssetImage("assets/images/book3.jpg")),
-                  ],
+                Image(
+                  image: CachedNetworkImageProvider(
+                    _categoriesProduct[index].image,
+                  ),
+                  height: 50,
+                  width: 50,
                 ),
-                const Spacer(),
                 Text(
                   _categoriesProduct[index].title,
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 21,
-                  ),
+                  style: Theme.of(context).textTheme.headline2,
                 ),
               ],
             ),
@@ -125,9 +108,13 @@ class _ProductListState extends State<ProductList> {
 
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.amberAccent,
+        backgroundColor: linesColor,
         appBar: AppBar(
-          title: const Text('Loyalty App'),
+          elevation: 0,
+          foregroundColor: colorText2,
+          backgroundColor: linesColor,
+          centerTitle: true,
+          title: const Text('Menú'),
         ),
         body: FutureBuilder(
           future: getProducts(),
@@ -135,116 +122,91 @@ class _ProductListState extends State<ProductList> {
             if (data.hasError) {
               return Center(child: Text("${data.error}"));
             } else if (data.hasData) {
-              return Stack(
-                overflow: Overflow.clip,
-                alignment: AlignmentDirectional.topCenter,
-                fit: StackFit.loose,
+              return Column(
                 children: <Widget>[
-                  const Header(),
-                  Expanded(
-                    child: Container(
-                      margin: const EdgeInsets.only(top: 140),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          topRight: Radius.circular(30),
+                  SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 0, horizontal: 25),
+                          child: Text("Elegir por categoria",
+                              style: Theme.of(context).textTheme.headline2),
                         ),
-                      ),
-                      padding:
-                          const EdgeInsets.only(left: 15, right: 15, top: 15),
-                      child: Column(
-                        children: <Widget>[
-                          SingleChildScrollView(
+                        const SizedBox(height: 11),
+                        Container(
+                            padding: EdgeInsets.only(left: 10),
+                            height: 150,
+                            child: categoriesList),
+                        const SizedBox(height: 15),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 0, horizontal: 25),
+                          child: Row(
+                            children: [
+                              Text('Todo ',
+                                  style:
+                                      Theme.of(context).textTheme.labelMedium),
+                              Text(categoryTitle,
+                                  style: Theme.of(context).textTheme.headline2),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 9),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 0, horizontal: 25),
+                      child: GridView.builder(
+                        itemCount: _currentProducts.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2, crossAxisSpacing: 10),
+                        itemBuilder: (ctx, index) {
+                          return Card(
+                            elevation: 10,
+                            shadowColor: shadowColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                const Text(
-                                  "Categories",
-                                  style: TextStyle(
-                                      fontSize: 24,
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.bold),
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: double.infinity,
+                                  height: 100.0,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: CachedNetworkImageProvider(
+                                        _currentProducts[index].image,
+                                      ),
+                                    ),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(20.0)),
+                                  ),
                                 ),
-                                const SizedBox(height: 11),
-                                Container(height: 151, child: categoriesList),
-                                const SizedBox(height: 15),
+                                SizedBox(height: 10),
                                 Text(
-                                  categoryTitle,
-                                  style: TextStyle(
-                                      fontSize: 21,
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.bold),
+                                    'S/.${_currentProducts[index].price.toString()}',
+                                    style: Theme.of(context).textTheme.caption),
+                                SizedBox(height: 10),
+                                Text(
+                                  _currentProducts[index].name,
+                                  style: Theme.of(context).textTheme.bodyText1,
                                 ),
-                                const SizedBox(height: 9),
+                                Text(
+                                  _currentProducts[index].description,
+                                  style: Theme.of(context).textTheme.bodyText2,
+                                ),
                               ],
                             ),
-                          ),
-                          Expanded(
-                            child: ListView.builder(
-                              itemCount: _currentProducts.length,
-                              itemBuilder: (ctx, index) {
-                                return Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 15),
-                                  padding: const EdgeInsets.all(15),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xffecf0f3),
-                                    borderRadius: BorderRadius.circular(9),
-                                  ),
-                                  child: Row(
-                                    children: <Widget>[
-                                      // const Icon(
-                                      //   Icons.auto_stories,
-                                      //   color: Colors.white,
-                                      // ),
-                                      CircleAvatar(
-                                        backgroundImage:
-                                            CachedNetworkImageProvider(
-                                                _currentProducts[index].image),
-                                      ),
-
-                                      const SizedBox(width: 21),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            RichText(
-                                              text: TextSpan(
-                                                children: [
-                                                  TextSpan(
-                                                    text:
-                                                        _currentProducts[index]
-                                                            .name,
-                                                    style: const TextStyle(
-                                                        color:
-                                                            Color(0xff333333),
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 21),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Text(
-                                              _currentProducts[index]
-                                                  .description,
-                                              style: const TextStyle(
-                                                  color: Colors.grey),
-                                              softWrap: false,
-                                              overflow: TextOverflow.fade,
-                                            )
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ],
+                          );
+                        },
                       ),
                     ),
                   ),

@@ -9,6 +9,8 @@ import 'package:testing/Screens/MainMenu.dart';
 import 'package:testing/Screens/OnboardingScreen.dart';
 import 'package:testing/Screens/SignInScreen.dart';
 import 'package:testing/Screens/WelcomePage.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:testing/Utils/globalVariables.dart';
 
 import 'Screens/ProductList.dart';
 
@@ -22,19 +24,62 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-          primarySwatch: Colors.amber,
-          canvasColor: Colors.white,
-          fontFamily: 'Raleway',
-          textTheme: ThemeData.light().textTheme.copyWith(
-              bodyText1: const TextStyle(color: Color.fromRGBO(20, 51, 51, 1)),
-              bodyText2: const TextStyle(color: Color.fromRGBO(20, 51, 51, 1)),
-              headline1: const TextStyle(
-                  fontSize: 24,
-                  fontFamily: 'RobotoCondensed',
-                  fontWeight: FontWeight.bold))),
+        primaryColor: Color(0xfff93c64),
+        textTheme: GoogleFonts.interTextTheme(textTheme).copyWith(
+          bodyText1: const TextStyle(
+            color: Color(0xff2d4057),
+            fontSize: 17,
+            fontWeight: FontWeight.w500,
+          ),
+          bodyText2: const TextStyle(
+            color: Color(0xff8893a0),
+            fontSize: 15,
+            fontWeight: FontWeight.w400,
+          ),
+          labelMedium: const TextStyle(
+            color: Color(0xfff93c64),
+            fontSize: 20,
+            fontWeight: FontWeight.w400,
+          ),
+          caption: const TextStyle(
+            color: Color(0xfff93c64),
+            fontSize: 13,
+            fontWeight: FontWeight.w300,
+          ),
+          headline1: const TextStyle(
+            color: Color(0xff2d4057),
+            fontSize: 30,
+            fontWeight: FontWeight.w500,
+          ),
+          headline2: const TextStyle(
+            color: Color(0xff2d4057),
+            fontSize: 20,
+            fontWeight: FontWeight.w400,
+          ),
+          button: const TextStyle(
+            color: Color(0xfff2f4f7),
+            fontSize: 10,
+            fontWeight: FontWeight.w300,
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            textStyle: Theme.of(context).textTheme.button,
+            padding:
+                const EdgeInsets.only(left: 40, right: 40, top: 13, bottom: 13),
+            elevation: 10,
+            primary: mainCTAColor,
+            shadowColor: shadowColor,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          ),
+        ),
+      ),
       // home: const MainMenu(),
       initialRoute: '/',
       routes: {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:testing/Models/StoreModel.dart';
+import 'package:testing/Utils/globalVariables.dart';
 import 'package:testing/Widgets/Carousel.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:custom_info_window/custom_info_window.dart';
@@ -85,62 +86,101 @@ class _StoreDetailPageState extends State<StoreDetailPage> {
     );
 
     return Scaffold(
+      backgroundColor: linesColor,
       appBar: AppBar(
+        elevation: 0,
+        foregroundColor: colorText2,
+        backgroundColor: linesColor,
+        centerTitle: true,
         title: Text('Tienda ${widget.storeModel.district}'),
       ),
       body: SingleChildScrollView(
+        padding: const EdgeInsets.only(left: 35, right: 35, top: 10),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Card(
-              clipBehavior: Clip.antiAlias,
-              child: Column(
-                children: [
-                  ListTile(
-                    title: Text(widget.storeModel.district),
-                    subtitle: Text(
-                      'Secondary Text',
-                      style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                    ),
+            Container(
+              margin: const EdgeInsets.all(0),
+              width: double.infinity,
+              child: Card(
+                color: cardColor,
+                elevation: 10,
+                shadowColor: shadowColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      right: 25, left: 25, top: 20, bottom: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(widget.storeModel.district,
+                          style: Theme.of(context).textTheme.bodyText1),
+                      Text('Horario: 9am - 5pm',
+                          style: Theme.of(context).textTheme.caption),
+                      Text('Contacto: +51 123 456 789',
+                          style: Theme.of(context).textTheme.bodyText2),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
+            const SizedBox(height: 20),
             Container(
-              height: 150,
-              child: Column(
-                children: <Widget>[
-                  Expanded(
-                    child: Carousel(typeAd: 'GAMIFY'),
-                  ),
-                ],
+                margin: const EdgeInsets.only(left: 10),
+                child: Text('Ubicación',
+                    style: Theme.of(context).textTheme.headline1)),
+            const SizedBox(height: 10),
+            Container(
+              padding: const EdgeInsets.all(4),
+              height: 300,
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(15),
+                  topRight: Radius.circular(15),
+                  bottomRight: Radius.circular(15),
+                  bottomLeft: Radius.circular(15),
+                ),
+                child: Stack(
+                  children: [
+                    GoogleMap(
+                      onTap: (position) {
+                        _customInfoWindowController.hideInfoWindow!();
+                      },
+                      onCameraMove: (position) {
+                        _customInfoWindowController.onCameraMove!();
+                      },
+                      onMapCreated: (GoogleMapController controller) async {
+                        _customInfoWindowController.googleMapController =
+                            controller;
+                      },
+                      markers: _markers,
+                      initialCameraPosition: CameraPosition(
+                        target: LatLng(lat, long),
+                        zoom: _zoom,
+                      ),
+                    ),
+                    CustomInfoWindow(
+                      controller: _customInfoWindowController,
+                      height: 200,
+                      width: 150,
+                      offset: 50,
+                    ),
+                  ],
+                ),
               ),
             ),
+            const SizedBox(height: 10),
             Container(
-              height: 400,
-              child: Stack(
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  GoogleMap(
-                    onTap: (position) {
-                      _customInfoWindowController.hideInfoWindow!();
-                    },
-                    onCameraMove: (position) {
-                      _customInfoWindowController.onCameraMove!();
-                    },
-                    onMapCreated: (GoogleMapController controller) async {
-                      _customInfoWindowController.googleMapController =
-                          controller;
-                    },
-                    markers: _markers,
-                    initialCameraPosition: CameraPosition(
-                      target: LatLng(lat, long),
-                      zoom: _zoom,
-                    ),
-                  ),
-                  CustomInfoWindow(
-                    controller: _customInfoWindowController,
-                    height: 200,
-                    width: 150,
-                    offset: 50,
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: const Text('Hacer una reserva'),
                   ),
                 ],
               ),

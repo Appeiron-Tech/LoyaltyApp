@@ -1,9 +1,12 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:testing/Models/ProductModel.dart';
+import 'package:testing/Screens/LoginScreen.dart';
 import 'package:testing/Screens/ProductList.dart';
+import 'package:testing/Utils/globalVariables.dart';
 import 'package:testing/Widgets/Carousel.dart';
 import 'package:testing/Widgets/MenuOption.dart';
 
@@ -28,84 +31,67 @@ class _HomePageState extends State<MainMenu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: linesColor,
       appBar: AppBar(
-        title: const Text('Loyalty App'),
+        elevation: 0,
+        foregroundColor: colorText2,
+        backgroundColor: linesColor,
+        centerTitle: true,
+        title: const Text(''),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Expanded(
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: Carousel(typeAd: 'MENU'),
-                  ),
-                ),
-              ],
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text('Alma cafe', style: Theme.of(context).textTheme.headline1),
+          const SizedBox(height: 10),
+          Container(
+            width: 500,
+            height: 250,
+            child: Expanded(
+              child: Container(
+                alignment: Alignment.center,
+                child: const Carousel(typeAd: 'MENU'),
+              ),
             ),
           ),
-          Expanded(
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: const MenuOption(
-                            title: 'Product List',
-                            color: Color.fromRGBO(220, 129, 100, 1),
-                            routeParam: ProductList.routeName,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                child: const MenuOption(
+                  title: 'Menú',
+                  color: Color.fromRGBO(220, 129, 100, 1),
+                  routeParam: ProductList.routeName,
                 ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: const MenuOption(
-                            title: 'Business Info',
-                            color: Color.fromRGBO(210, 189, 100, 1),
-                            routeParam: BusinessInfo.routeName,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+              ),
+              Container(
+                child: const MenuOption(
+                  title: 'Ubícanos',
+                  color: Color.fromRGBO(210, 189, 100, 1),
+                  routeParam: BusinessInfo.routeName,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Expanded(
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: const MenuOption(
-                      title: 'Gamify Program',
-                      color: Color.fromRGBO(220, 189, 100, 1),
-                      routeParam: GamifyProgram.routeName,
+          SizedBox(
+            width: 300, //
+            child: ElevatedButton(
+              onPressed: () async {
+                FirebaseAuth _auth1 = await FirebaseAuth.instance;
+                if (_auth1.currentUser == null) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const LoginScreen(),
                     ),
-                  ),
-                ),
-              ],
+                  );
+                } else {
+                  Navigator.of(context)
+                      .pushNamed(GamifyProgram.routeName, arguments: {
+                    'title': 'Gamify',
+                  });
+                }
+              },
+              child: Text('ACCESS GAME'),
             ),
           ),
         ],
