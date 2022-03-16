@@ -6,6 +6,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 import 'dart:async';
 
+import 'package:testing/Widgets/appBar.dart';
+
 class StoreDetailPage extends StatefulWidget {
   const StoreDetailPage({Key? key, required this.storeModel}) : super(key: key);
 
@@ -87,12 +89,9 @@ class _StoreDetailPageState extends State<StoreDetailPage> {
 
     return Scaffold(
       backgroundColor: linesColor,
-      appBar: AppBar(
-        elevation: 0,
-        foregroundColor: colorText2,
-        backgroundColor: linesColor,
-        centerTitle: true,
-        title: Text('Tienda ${widget.storeModel.district}'),
+      appBar: AppBarWidget(
+        appBarText: 'Tienda ${widget.storeModel.district}',
+        appbackgroundColor: linesColor,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(left: 35, right: 35, top: 10),
@@ -120,7 +119,7 @@ class _StoreDetailPageState extends State<StoreDetailPage> {
                           style: Theme.of(context).textTheme.bodyText1),
                       Text('Horario: 9am - 5pm',
                           style: Theme.of(context).textTheme.caption),
-                      Text('Contacto: +51 123 456 789',
+                      Text('Contacto: ${widget.storeModel.phones[0]}',
                           style: Theme.of(context).textTheme.bodyText2),
                     ],
                   ),

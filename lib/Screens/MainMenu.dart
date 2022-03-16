@@ -1,28 +1,15 @@
-import 'dart:convert';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:testing/Models/ProductModel.dart';
+import 'package:provider/provider.dart';
 import 'package:testing/Screens/LoginScreen.dart';
 import 'package:testing/Screens/ProductList.dart';
 import 'package:testing/Utils/globalVariables.dart';
 import 'package:testing/Widgets/Carousel.dart';
-import 'package:testing/Widgets/MenuOption.dart';
-
 import 'BusinessInfo.dart';
-import 'GamifyProgram.dart';
 
 class MainMenu extends StatefulWidget {
   const MainMenu({Key? key}) : super(key: key);
-
-  // // Fetch content from the json file
-  // Future<void> readJson() async {
-  //   final String response = await rootBundle.loadString('assets/sample.json');
-  //   final data = await json.decode(response);
-  //   setState(() { _items = data["items"]; });
-  // }
-
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -32,23 +19,30 @@ class _HomePageState extends State<MainMenu> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: linesColor,
-      appBar: AppBar(
-        elevation: 0,
-        foregroundColor: colorText2,
-        backgroundColor: linesColor,
-        centerTitle: true,
-        title: const Text(''),
-      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          Container(
+            margin: const EdgeInsets.only(top: 20, right: 10),
+            width: double.infinity,
+            child: const Align(
+              alignment: Alignment.centerRight,
+              child: Image(
+                image: AssetImage('assets/images/LOGO X-03.png'),
+                height: 85,
+                width: 85,
+              ),
+            ),
+          ),
           Text('Alma cafe', style: Theme.of(context).textTheme.headline1),
           const SizedBox(height: 10),
-          Container(
-            width: 500,
-            height: 250,
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height * 0.25,
             child: Expanded(
               child: Container(
+                width: double.infinity,
                 alignment: Alignment.center,
                 child: const Carousel(typeAd: 'MENU'),
               ),
@@ -58,23 +52,103 @@ class _HomePageState extends State<MainMenu> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
-                child: const MenuOption(
-                  title: 'Menú',
-                  color: Color.fromRGBO(220, 129, 100, 1),
-                  routeParam: ProductList.routeName,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ProductList(),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Card(
+                      elevation: 10,
+                      shadowColor: shadowColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: 140.0,
+                            height: MediaQuery.of(context).size.height * 0.13,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: CachedNetworkImageProvider(
+                                  'https://picsum.photos/500/500',
+                                ),
+                              ),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15.0)),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Text(
+                              'Menú',
+                              style: Theme.of(context).textTheme.headline2,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
               Container(
-                child: const MenuOption(
-                  title: 'Ubícanos',
-                  color: Color.fromRGBO(210, 189, 100, 1),
-                  routeParam: BusinessInfo.routeName,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => BusinessInfo(),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Card(
+                      elevation: 10,
+                      shadowColor: shadowColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: 140.0,
+                            height: MediaQuery.of(context).size.height * 0.13,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: CachedNetworkImageProvider(
+                                  'https://picsum.photos/500/500',
+                                ),
+                              ),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15.0)),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Text(
+                              'Ubícanos',
+                              style: Theme.of(context).textTheme.headline2,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ],
           ),
           SizedBox(
-            width: 300, //
+            width: 300,
             child: ElevatedButton(
               onPressed: () async {
                 FirebaseAuth _auth1 = await FirebaseAuth.instance;
@@ -85,10 +159,8 @@ class _HomePageState extends State<MainMenu> {
                     ),
                   );
                 } else {
-                  Navigator.of(context)
-                      .pushNamed(GamifyProgram.routeName, arguments: {
-                    'title': 'Gamify',
-                  });
+                  Provider.of<ValueNotifier<int>>(context, listen: false)
+                      .value = 2;
                 }
               },
               child: Text('ACCESS GAME'),

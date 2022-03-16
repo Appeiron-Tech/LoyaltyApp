@@ -43,7 +43,13 @@ dependencies:
   google_sign_in: ^5.2.3
   introduction_screen: ^3.0.0
   modal_bottom_sheet: ^2.0.0
+  proste_bezier_curve: ^2.0.2
+  provider: ^6.0.2
   qr_flutter: ^4.0.0
+  splashscreen:
+    git:
+      url: https://github.com/DPLYR-dev/SplashScreenFlutterPackage.git
+      ref: master
 
 dev_dependencies:
   flutter_lints: ^1.0.0
@@ -72,10 +78,11 @@ flutter:
     - assets/images/bookcase0.png
     - assets/images/bookcase1.png
     - assets/images/bookcase2.png
+    - assets/images/LOGO X-03.png
+    - assets/images/logo_splash.png
     # DDBB
     - assets/DB/categories.json
     - assets/DB/products.json
-
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see

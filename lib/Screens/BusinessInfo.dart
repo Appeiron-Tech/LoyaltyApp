@@ -4,10 +4,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:testing/Screens/StoreDetailScreen.dart';
 import 'package:testing/Utils/globalVariables.dart';
 import 'package:testing/Utils/utils.dart';
+import 'package:testing/Widgets/appBar.dart';
 
 class BusinessInfo extends StatefulWidget {
-  static const routeName = '/business-info';
-
   @override
   State<BusinessInfo> createState() => _BusinessInfoState();
 }
@@ -41,10 +40,6 @@ class _BusinessInfoState extends State<BusinessInfo> {
 
   @override
   Widget build(BuildContext context) {
-    final routeArgs =
-        ModalRoute.of(context)?.settings.arguments as Map<String, String>;
-    final title = routeArgs['title'];
-
     Widget storeList = ListView.builder(
         itemCount: stores.length,
         itemBuilder: (context, index) {
@@ -108,12 +103,9 @@ class _BusinessInfoState extends State<BusinessInfo> {
           )
         : Scaffold(
             backgroundColor: linesColor,
-            appBar: AppBar(
-              elevation: 0,
-              foregroundColor: colorText2,
-              backgroundColor: linesColor,
-              centerTitle: true,
-              title: const Text('Lista de locales'),
+            appBar: const AppBarWidget(
+              appBarText: 'Lista de locales',
+              appbackgroundColor: linesColor,
             ),
             body: Padding(
               padding: const EdgeInsets.only(left: 35, right: 35, top: 10),

@@ -12,6 +12,7 @@ class UserModel {
   final String district;
   final String province;
   final String clientId;
+  final String imageUrl;
 
   UserModel({
     required this.uid,
@@ -25,6 +26,7 @@ class UserModel {
     required this.city,
     required this.district,
     required this.province,
+    required this.imageUrl,
   });
 
   static UserModel fromSnap(DocumentSnapshot snap) {
@@ -42,6 +44,7 @@ class UserModel {
       district: snapshot["district"],
       province: snapshot["province"],
       clientId: snapshot["clientId"],
+      imageUrl: snapshot["imageUrl"],
     );
   }
 
@@ -56,6 +59,7 @@ class UserModel {
         "city": city,
         "district": district,
         "province": province,
-        "clientId": clientId
+        "clientId": clientId,
+        "imageUrl": imageUrl,
       };
 }

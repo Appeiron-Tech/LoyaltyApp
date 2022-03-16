@@ -21,6 +21,7 @@ class AuthMethods {
     required String city,
     required String province,
     required String clientId,
+    required String imageUrl,
   }) async {
     String res = "Ocurrió un error";
     print("Estoy en signup");
@@ -53,6 +54,7 @@ class AuthMethods {
           district: district,
           province: province,
           clientId: clientId,
+          imageUrl: imageUrl,
         );
 
         // enviar los datos del usuario a firestore

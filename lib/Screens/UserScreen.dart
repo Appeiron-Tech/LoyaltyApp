@@ -1,9 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:testing/Models/UserModel.dart';
 import 'package:testing/Resources/auth_methods.dart';
 import 'package:testing/Resources/firestore_methods.dart';
+import 'package:testing/Screens/MainMenu.dart';
+import 'package:testing/Utils/globalVariables.dart';
 import 'package:testing/Utils/utils.dart';
+import 'package:testing/Widgets/appBar.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({Key? key}) : super(key: key);
@@ -42,6 +46,13 @@ class _UserPageState extends State<UserPage> {
   void initState() {
     getData();
     super.initState();
+  }
+
+  void logout() async {
+    await FirebaseAuth.instance.signOut();
+
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const MainMenu()));
   }
 
   void getData() async {
@@ -99,106 +110,203 @@ class _UserPageState extends State<UserPage> {
             child: CircularProgressIndicator(),
           )
         : Scaffold(
-            appBar: AppBar(
-              title: const Text('User details'),
+            backgroundColor: Colors.white,
+            appBar: const AppBarWidget(
+              appBarText: 'User',
+              appbackgroundColor: Colors.white,
             ),
             body: SingleChildScrollView(
+              padding: const EdgeInsets.only(left: 50, right: 50, bottom: 70),
               child: Column(
                 children: <Widget>[
-                  TextFormField(
-                    controller: _nombreController,
-                    decoration: const InputDecoration(
-                      border: UnderlineInputBorder(),
-                      filled: true,
-                      icon: Icon(Icons.person),
-                      label: Text("Nombres"),
+                  GestureDetector(
+                    onTap: () {},
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundImage: CachedNetworkImageProvider(
+                          currentsUser?.imageUrl ??
+                              'https://picsum.photos/100'),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  Theme(
+                    data: ThemeData(
+                      inputDecorationTheme: const InputDecorationTheme(
+                        labelStyle: TextStyle(
+                          color: colorText1,
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: colorText1),
+                        ),
+                      ),
+                    ),
+                    child: TextFormField(
+                      controller: _nombreController,
+                      decoration: const InputDecoration(
+                        label: Text("Nombres"),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 10),
-                  TextFormField(
-                    controller: _apellidoController,
-                    decoration: const InputDecoration(
-                      border: UnderlineInputBorder(),
-                      filled: true,
-                      icon: Icon(null),
-                      label: Text("Apellidos"),
+                  Theme(
+                    data: ThemeData(
+                      inputDecorationTheme: const InputDecorationTheme(
+                        labelStyle: TextStyle(
+                          color: colorText1,
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: colorText1),
+                        ),
+                      ),
+                    ),
+                    child: TextFormField(
+                      controller: _apellidoController,
+                      decoration: const InputDecoration(
+                        label: Text("Apellidos"),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 10),
-                  TextFormField(
-                    controller: _telefonoController,
-                    decoration: const InputDecoration(
-                      border: UnderlineInputBorder(),
-                      filled: true,
-                      icon: Icon(Icons.phone),
-                      label: Text("Telefono"),
+                  Theme(
+                    data: ThemeData(
+                      inputDecorationTheme: const InputDecorationTheme(
+                        labelStyle: TextStyle(
+                          color: colorText1,
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: colorText1),
+                        ),
+                      ),
+                    ),
+                    child: TextFormField(
+                      controller: _telefonoController,
+                      decoration: const InputDecoration(
+                        label: Text("Telefono"),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 10),
-                  TextFormField(
-                    controller: _direccionController,
-                    decoration: const InputDecoration(
-                      border: UnderlineInputBorder(),
-                      filled: true,
-                      icon: Icon(Icons.location_on),
-                      label: Text("Dirección"),
+                  Theme(
+                    data: ThemeData(
+                      inputDecorationTheme: const InputDecorationTheme(
+                        labelStyle: TextStyle(
+                          color: colorText1,
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: colorText1),
+                        ),
+                      ),
+                    ),
+                    child: TextFormField(
+                      controller: _direccionController,
+                      decoration: const InputDecoration(
+                        label: Text("Dirección"),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 10),
-                  TextFormField(
-                    controller: _referenciaController,
-                    decoration: const InputDecoration(
-                      border: UnderlineInputBorder(),
-                      filled: true,
-                      icon: Icon(null),
-                      label: Text("Detalles/Referencia"),
+                  Theme(
+                    data: ThemeData(
+                      inputDecorationTheme: const InputDecorationTheme(
+                        labelStyle: TextStyle(
+                          color: colorText1,
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: colorText1),
+                        ),
+                      ),
+                    ),
+                    child: TextFormField(
+                      controller: _referenciaController,
+                      decoration: const InputDecoration(
+                        label: Text("Detalles/Referencia"),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 10),
-                  TextFormField(
-                    controller: _distritoController,
-                    decoration: const InputDecoration(
-                      border: UnderlineInputBorder(),
-                      filled: true,
-                      icon: Icon(null),
-                      label: Text("Distrito"),
+                  Theme(
+                    data: ThemeData(
+                      inputDecorationTheme: const InputDecorationTheme(
+                        labelStyle: TextStyle(
+                          color: colorText1,
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: colorText1),
+                        ),
+                      ),
+                    ),
+                    child: TextFormField(
+                      controller: _distritoController,
+                      decoration: const InputDecoration(
+                        label: Text("Distrito"),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 10),
                   Row(
                     children: <Widget>[
                       Expanded(
-                        child: TextFormField(
-                          controller: _ciudadController,
-                          decoration: const InputDecoration(
-                            border: UnderlineInputBorder(),
-                            filled: true,
-                            icon: Icon(null),
-                            label: Text("Ciudad"),
+                        child: Theme(
+                          data: ThemeData(
+                            inputDecorationTheme: const InputDecorationTheme(
+                              labelStyle: TextStyle(
+                                color: colorText1,
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: colorText1),
+                              ),
+                            ),
+                          ),
+                          child: TextFormField(
+                            controller: _ciudadController,
+                            decoration: const InputDecoration(
+                              label: Text("Ciudad"),
+                            ),
                           ),
                         ),
                       ),
                       const SizedBox(width: 10),
                       Expanded(
-                        child: TextFormField(
-                          controller: _provinciaController,
-                          decoration: const InputDecoration(
-                            border: UnderlineInputBorder(),
-                            filled: true,
-                            label: Text("Provincia"),
+                        child: Theme(
+                          data: ThemeData(
+                            inputDecorationTheme: const InputDecorationTheme(
+                              labelStyle: TextStyle(
+                                color: colorText1,
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: colorText1),
+                              ),
+                            ),
+                          ),
+                          child: TextFormField(
+                            controller: _provinciaController,
+                            decoration: const InputDecoration(
+                              label: Text("Provincia"),
+                            ),
                           ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
-                  Container(
+                  const SizedBox(height: 20),
+                  SizedBox(
                     width: double.infinity,
+                    height: 50,
                     child: ElevatedButton(
                       onPressed: updateUser,
                       child: const Text("Actualizar"),
                     ),
                   ),
+                  const SizedBox(height: 7),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: logout,
+                      child: const Text("Cerrar sesión"),
+                    ),
+                  ),
+                  const SizedBox(height: 7),
                 ],
               ),
             ),

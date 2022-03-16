@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:testing/Models/AnnouncementModel.dart';
 import 'package:testing/Models/ClientModel.dart';
 import 'package:testing/Resources/firestore_methods.dart';
+import 'package:testing/Screens/AdScreen.dart';
 import 'package:testing/Utils/globalVariables.dart';
 
 class Carousel extends StatefulWidget {
@@ -47,43 +48,44 @@ class _CarouselWithIndicatorState extends State<Carousel> {
 
     final List<Widget> imageSliders = listAnnouncements
         .map(
-          (item) => Container(
-            margin: const EdgeInsets.all(2.0),
+          (item) => GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const AdPage(),
+                ),
+              );
+            },
             child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(30.0)),
-                child: Stack(
-                  children: <Widget>[
-                    CachedNetworkImage(
-                        imageUrl: item.image, fit: BoxFit.cover, width: 1000.0),
-                  ],
-                )),
+              borderRadius: const BorderRadius.all(Radius.circular(30.0)),
+              child: CachedNetworkImage(
+                  imageUrl: item.image,
+                  fit: BoxFit.cover,
+                  width: MediaQuery.of(context).size.width),
+            ),
           ),
         )
         .toList();
 
-    return Scaffold(
-      backgroundColor: linesColor,
-      body: Column(
-        children: [
-          Expanded(
-            child: CarouselSlider(
-              items: imageSliders,
-              carouselController: _controller,
-              options: CarouselOptions(
-                autoPlay: true,
-                enlargeCenterPage: true,
-                aspectRatio: 2.0,
-                onPageChanged: (index, reason) {
-                  setState(
-                    () {
-                      _current = index;
-                    },
-                  );
-                },
-              ),
-            ),
-          ),
-        ],
+    return Container(
+      color: Colors.transparent,
+      width: MediaQuery.of(context).size.width,
+      child: CarouselSlider(
+        items: imageSliders,
+        carouselController: _controller,
+        options: CarouselOptions(
+          viewportFraction: 0.7,
+          autoPlay: true,
+          enlargeCenterPage: true,
+          aspectRatio: 2.0,
+          onPageChanged: (index, reason) {
+            setState(
+              () {
+                _current = index;
+              },
+            );
+          },
+        ),
       ),
     );
   }

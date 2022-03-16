@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:provider/provider.dart';
 import 'package:testing/Resources/auth_methods.dart';
 import 'package:testing/Screens/GamifyProgram.dart';
 import 'package:testing/Screens/SignInScreen.dart';
+import 'package:testing/Utils/globalVariables.dart';
 import 'package:testing/Utils/utils.dart';
+import 'package:testing/Widgets/appBar.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -17,16 +20,12 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
 
-  // ----------------------------------------------------------------
-
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
-
-  // ------------------------------------------------------------------
 
   void loginUser() async {
     setState(() {
@@ -37,15 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
         email: _emailController.text, password: _passwordController.text);
 
     if (res == "Logeado") {
-      // ir a otra pagina
-      Map<String, String> route = {'title': GamifyProgram.routeName};
-
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => GamifyProgram(),
-          settings: RouteSettings(arguments: route),
-        ),
-      );
+      Provider.of<ValueNotifier<int>>(context, listen: false).value = 2;
 
       setState(() {
         _isLoading = false;
@@ -67,15 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (res == 'Logeado con Google') {
       // ir a otra pagina
-      Map<String, String> route = {'title': GamifyProgram.routeName};
-
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => GamifyProgram(),
-          settings: RouteSettings(arguments: route),
-        ),
-      );
-
+      Provider.of<ValueNotifier<int>>(context, listen: false).value = 2;
       setState(() {
         _isLoading = false;
       });
@@ -92,31 +75,30 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Login Page"),
+      backgroundColor: Colors.white,
+      appBar: const AppBarWidget(
+        appBarText: 'Sign In',
+        appbackgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(30),
+          padding: const EdgeInsets.all(40),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               TextFormField(
                 controller: _emailController,
-                decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  filled: true,
-                  icon: Icon(Icons.email),
-                  label: Text("Email"),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  label: Text("Email address"),
                 ),
               ),
               SizedBox(height: 20),
               TextFormField(
                 controller: _passwordController,
                 decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  filled: true,
-                  icon: Icon(Icons.password),
-                  label: Text("Contraseña"),
+                  border: OutlineInputBorder(),
+                  label: Text("Password"),
                 ),
               ),
               SizedBox(height: 20),
@@ -124,25 +106,51 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: double.infinity,
                 child: Column(
                   children: <Widget>[
-                    ElevatedButton(
-                      onPressed: loginUser,
-                      child: Text("Ingresar"),
+                    Container(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: loginUser,
+                        child: Text("Ingresar"),
+                      ),
                     ),
-                    SizedBox(height: 5),
-                    SignInButton(
-                      Buttons.Google,
-                      text: "Ingresa con Google",
-                      onPressed: loginUserGoogle,
+                    SizedBox(height: 20),
+                    Text('OR', style: Theme.of(context).textTheme.bodyText2),
+                    SizedBox(height: 15),
+                    Container(
+                      width: double.infinity,
+                      height: 50,
+                      child: SignInButton(
+                        Buttons.Google,
+                        text: "Ingresa con Google",
+                        onPressed: loginUserGoogle,
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                      ),
                     ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => const SignInPage(),
-                          ),
-                        );
-                      },
-                      child: const Text("¿No tienes una cuenta? Registrate"),
+                    SizedBox(height: 15),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment
+                          .center, //Center Row contents horizontally,
+                      crossAxisAlignment: CrossAxisAlignment
+                          .center, //Center Row contents vertically,
+                      children: [
+                        Text('Not a user yet?',
+                            style: Theme.of(context).textTheme.bodyText1),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => const SignInPage(),
+                              ),
+                            );
+                          },
+                          child: Text("Sign up",
+                              style: Theme.of(context).textTheme.labelMedium),
+                        ),
+                      ],
                     ),
                   ],
                 ),

@@ -15,7 +15,7 @@ final List<String> imgList = [
   'https://picsum.photos/500/500',
 ];
 
-const durationImg = 3;
+const durationImg = 5;
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -63,45 +63,71 @@ class _WelcomePageState extends State<WelcomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Builder(builder: (context) {
-        final double height = MediaQuery.of(context).size.height;
-        return Container(
-          child: Stack(
-            alignment: Alignment.topRight,
-            children: <Widget>[
-              CarouselSlider(
-                options: CarouselOptions(
-                  height: MediaQuery.of(context).size.height,
-                  viewportFraction: 1,
-                  autoPlay: true,
-                  autoPlayInterval: const Duration(seconds: durationImg),
-                ),
-                items: listAnnouncements
-                    .map(
-                      (item) => Container(
-                        child: Center(
-                          child: CachedNetworkImage(
-                            imageUrl: item.image,
-                            fit: BoxFit.cover,
-                            height: height,
-                          ),
+    return Container(
+      decoration: const BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xfff93c64), Color(0xfff78b63)])),
+      child: Center(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Builder(builder: (context) {
+            final double height = MediaQuery.of(context).size.height;
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 40),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(30.0)),
+                    child: Container(
+                      height: 600,
+                      width: 450,
+                      child: CarouselSlider(
+                        options: CarouselOptions(
+                          height: MediaQuery.of(context).size.height,
+                          viewportFraction: 1,
+                          autoPlay: true,
+                          autoPlayInterval:
+                              const Duration(seconds: durationImg),
                         ),
+                        items: listAnnouncements
+                            .map(
+                              (item) => Center(
+                                child: CachedNetworkImage(
+                                  imageUrl: item.image,
+                                  fit: BoxFit.cover,
+                                  height: height,
+                                  width: double.infinity,
+                                ),
+                              ),
+                            )
+                            .toList(),
                       ),
-                    )
-                    .toList(),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: () {
+                      route();
+                    },
+                    child: const Text(
+                      'Skip',
+                      style: TextStyle(
+                        color: Color(0xfff2f4f7),
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              IconButton(
-                onPressed: () {
-                  route();
-                },
-                icon: const Icon(Icons.close),
-                iconSize: 60,
-              ),
-            ],
-          ),
-        );
-      }),
+            );
+          }),
+        ),
+      ),
     );
   }
 }

@@ -359,6 +359,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
+  nested:
+    dependency: transitive
+    description:
+      name: nested
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   octo_image:
     dependency: transitive
     description:
@@ -450,6 +457,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.2.4"
+  proste_bezier_curve:
+    dependency: "direct main"
+    description:
+      name: proste_bezier_curve
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.2"
+  provider:
+    dependency: "direct main"
+    description:
+      name: provider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "6.0.2"
   qr:
     dependency: transitive
     description:
@@ -490,6 +511,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.1"
+  splashscreen:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: master
+      resolved-ref: a05b64f8326f7c2615491e9f47a1f2dcf8b28a69
+      url: "https://github.com/DPLYR-dev/SplashScreenFlutterPackage.git"
+    source: git
+    version: "1.4.0"
   sqflite:
     dependency: transitive
     description:

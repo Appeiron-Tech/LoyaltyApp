@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:provider/provider.dart';
 import 'package:testing/Resources/auth_methods.dart';
 import 'package:testing/Screens/GamifyProgram.dart';
 import 'package:testing/Utils/globalVariables.dart';
 import 'package:testing/Utils/utils.dart';
+import 'package:testing/Widgets/appBar.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -48,18 +50,18 @@ class _SignInPageState extends State<SignInPage> {
 
     // registrar al usuario
     String res = await AuthMethods().signUpUser(
-      email: _emailController.text,
-      password: _passwordController.text,
-      name: _nombreController.text,
-      lastName: _apellidoController.text,
-      phone: _telefonoController.text,
-      address: _direccionController.text,
-      reference: _referenciaController.text,
-      district: _distritoController.text,
-      city: _ciudadController.text,
-      province: _provinciaController.text,
-      clientId: clientId,
-    );
+        email: _emailController.text,
+        password: _passwordController.text,
+        name: _nombreController.text,
+        lastName: _apellidoController.text,
+        phone: _telefonoController.text,
+        address: _direccionController.text,
+        reference: _referenciaController.text,
+        district: _distritoController.text,
+        city: _ciudadController.text,
+        province: _provinciaController.text,
+        clientId: clientId,
+        imageUrl: 'urlgeneric');
 
     // verificar la respuesta
     if (res == 'Registrado') {
@@ -67,14 +69,7 @@ class _SignInPageState extends State<SignInPage> {
         _isLoading = false;
       });
 
-      Map<String, String> route = {'title': GamifyProgram.routeName};
-
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => GamifyProgram(),
-          settings: RouteSettings(arguments: route),
-        ),
-      );
+      Provider.of<ValueNotifier<int>>(context, listen: false).value = 2;
     } else {
       setState(() {
         _isLoading = false;
@@ -87,16 +82,19 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Registro')),
+      backgroundColor: Colors.white,
+      appBar: const AppBarWidget(
+        appBarText: 'Register',
+        appbackgroundColor: Colors.white,
+      ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
         child: Column(
           children: <Widget>[
             TextFormField(
               controller: _nombreController,
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
-                filled: true,
                 icon: Icon(Icons.person),
                 label: Text("Nombres"),
               ),
@@ -106,7 +104,6 @@ class _SignInPageState extends State<SignInPage> {
               controller: _apellidoController,
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
-                filled: true,
                 icon: Icon(null),
                 label: Text("Apellidos"),
               ),
@@ -116,7 +113,6 @@ class _SignInPageState extends State<SignInPage> {
               controller: _emailController,
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
-                filled: true,
                 icon: Icon(Icons.email),
                 label: Text("Email"),
               ),
@@ -126,7 +122,6 @@ class _SignInPageState extends State<SignInPage> {
               controller: _passwordController,
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
-                filled: true,
                 icon: Icon(Icons.password),
                 label: Text("Password"),
               ),
@@ -136,7 +131,6 @@ class _SignInPageState extends State<SignInPage> {
               controller: _telefonoController,
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
-                filled: true,
                 icon: Icon(Icons.phone),
                 label: Text("Telefono"),
               ),
@@ -146,7 +140,6 @@ class _SignInPageState extends State<SignInPage> {
               controller: _direccionController,
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
-                filled: true,
                 icon: Icon(Icons.location_on),
                 label: Text("Dirección"),
               ),
@@ -156,7 +149,6 @@ class _SignInPageState extends State<SignInPage> {
               controller: _referenciaController,
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
-                filled: true,
                 icon: Icon(null),
                 label: Text("Detalles/Referencia"),
               ),
@@ -166,7 +158,6 @@ class _SignInPageState extends State<SignInPage> {
               controller: _distritoController,
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
-                filled: true,
                 icon: Icon(null),
                 label: Text("Distrito"),
               ),
@@ -179,7 +170,6 @@ class _SignInPageState extends State<SignInPage> {
                     controller: _ciudadController,
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
-                      filled: true,
                       icon: Icon(null),
                       label: Text("Ciudad"),
                     ),
@@ -191,7 +181,6 @@ class _SignInPageState extends State<SignInPage> {
                     controller: _provinciaController,
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
-                      filled: true,
                       label: Text("Provincia"),
                     ),
                   ),
@@ -201,9 +190,10 @@ class _SignInPageState extends State<SignInPage> {
             SizedBox(height: 10),
             Container(
               width: double.infinity,
+              height: 50,
               child: ElevatedButton(
                 onPressed: signUpUser,
-                child: Text("Registrar"),
+                child: Text("SIGN UP"),
               ),
             ),
           ],
