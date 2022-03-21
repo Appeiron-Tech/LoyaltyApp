@@ -133,7 +133,7 @@ class MyNavigationBar extends StatefulWidget {
 
 class _MyNavigationBarState extends State<MyNavigationBar> {
   final List<Widget> _children = [
-    const HomePage(),
+    // const HomePage(),
     const MainMenu(),
     GamifyProgram(),
     const UserPage(),
@@ -174,8 +174,8 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
             currentIndex: Provider.of<ValueNotifier<int>>(context).value,
             items: const [
               BottomNavigationBarItem(icon: Icon(Icons.home), label: "Inicio"),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.favorite), label: "Restaurant"),
+              // BottomNavigationBarItem(
+              //     icon: Icon(Icons.favorite), label: "Restaurant"),
               BottomNavigationBarItem(
                   icon: Icon(Icons.shopping_cart), label: "Game"),
               BottomNavigationBarItem(
