@@ -36,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
         email: _emailController.text, password: _passwordController.text);
 
     if (res == "Logeado") {
-      Provider.of<ValueNotifier<int>>(context, listen: false).value = 2;
+      Provider.of<ValueNotifier<int>>(context, listen: false).value = 1;
 
       setState(() {
         _isLoading = false;
@@ -58,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (res == 'Logeado con Google') {
       // ir a otra pagina
-      Provider.of<ValueNotifier<int>>(context, listen: false).value = 2;
+      Provider.of<ValueNotifier<int>>(context, listen: false).value = 1;
       setState(() {
         _isLoading = false;
       });

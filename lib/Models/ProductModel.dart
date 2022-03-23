@@ -10,6 +10,7 @@ class ProductModel {
   String image = '';
   String description = '';
   num order = 0;
+  num minPreparado = 0;
 
   ProductModel({
     required this.uid,
@@ -21,6 +22,7 @@ class ProductModel {
     required this.offerPctg,
     required this.price,
     required this.order,
+    required this.minPreparado,
   });
 
   static ProductModel fromSnap(DocumentSnapshot snap) {
@@ -35,6 +37,7 @@ class ProductModel {
       image: snapshot['image'],
       description: snapshot['description'],
       order: snapshot['order'],
+      minPreparado: snapshot['minPreparado'],
     );
   }
 }

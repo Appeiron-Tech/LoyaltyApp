@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:testing/Models/CategoryModel.dart';
 import 'package:testing/Models/ProductModel.dart';
 import 'package:testing/Resources/firestore_methods.dart';
+import 'package:testing/Screens/ProductScreen.dart';
 import 'package:testing/Widgets/ProductList/Header.dart';
 import 'package:testing/Widgets/appBar.dart';
 
@@ -21,20 +22,26 @@ class _ProductListState extends State<ProductList> {
   List<CategoryModel> _categoriesProduct = [];
   List<ProductModel> _currentProducts = [];
   List<ProductModel> _allProducts = [];
-  String currentCategoryId = '';
-  String categoryTitle = 'Categoria 0';
+  List<DropdownMenuItem<String>> categoryItems = [
+    DropdownMenuItem(child: Text("Todas"), value: "None"),
+  ];
 
-  var dropdownValue;
-  String selectedValue = "None";
-  List<DropdownMenuItem<String>> get dropdownItems {
-    List<DropdownMenuItem<String>> menuItems = [
-      DropdownMenuItem(child: Text("Ubicación"), value: "None"),
-      DropdownMenuItem(child: Text("USA"), value: "USA"),
-      DropdownMenuItem(child: Text("Canada"), value: "Canada"),
-      DropdownMenuItem(child: Text("Brazil"), value: "Brazil"),
-      DropdownMenuItem(child: Text("England"), value: "England"),
+  var dropdownCategoryValue;
+
+  String selectedCategoryValue = "None";
+
+  var dropdownPriceValue;
+  String selectedPriceValue = "0";
+  List<DropdownMenuItem<String>> get dropdownPrices {
+    List<DropdownMenuItem<String>> priceItems = const [
+      DropdownMenuItem(child: Text("Todos"), value: "0"),
+      DropdownMenuItem(child: Text("Min  - S/.20"), value: "1"),
+      DropdownMenuItem(child: Text("S/.20 - S/.50"), value: "2"),
+      DropdownMenuItem(child: Text("S/.50 - S/.75"), value: "3"),
+      DropdownMenuItem(child: Text("S/.75 - S/.100"), value: "4"),
+      DropdownMenuItem(child: Text("S/.100 - Max"), value: "5"),
     ];
-    return menuItems;
+    return priceItems;
   }
 
   @override
@@ -45,7 +52,12 @@ class _ProductListState extends State<ProductList> {
 
   getCategories() async {
     _categoriesProduct = await FirestoreMethods.getCategories(clientId);
-    currentCategoryId = _categoriesProduct[0].uid;
+
+    for (var category in _categoriesProduct) {
+      categoryItems.add(
+        DropdownMenuItem(child: Text(category.title), value: category.uid),
+      );
+    }
     setState(() {});
   }
 
@@ -55,131 +67,67 @@ class _ProductListState extends State<ProductList> {
       return _allProducts = await FirestoreMethods.getProducts();
     }
 
-    Future<void> filterProducts(String categoryId, String categoryName) async {
+    Future<void> filterProducts(String categoryId) async {
       setState(
         () {
-          categoryTitle = categoryName;
-          _currentProducts = _allProducts
-              .where((product) => product.categoryId == categoryId)
-              .toList()
-            ..sort((a, b) => a.order.compareTo(b.order));
+          if (categoryId == 'None') {
+            _currentProducts = _allProducts;
+          } else {
+            _currentProducts = _allProducts
+                .where((product) => product.categoryId == categoryId)
+                .toList()
+              ..sort((a, b) => a.order.compareTo(b.order));
+          }
         },
       );
     }
 
-    final Widget categoriesList = ListView.builder(
-      itemCount: _categoriesProduct.length,
-      scrollDirection: Axis.horizontal,
-      itemBuilder: (context, index) {
-        return GestureDetector(
-          onTap: () {
-            print("Presionado");
-            print(_categoriesProduct[index].title);
-            filterProducts(
-                _categoriesProduct[index].uid, _categoriesProduct[index].title);
-          },
-          child: Container(
-            // height: MediaQuery.of(context).size.height * 0.09,
-            margin: const EdgeInsets.only(right: 15),
-            padding: const EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: Colors.white,
-              boxShadow: const [
-                BoxShadow(
-                  color: shadowColor,
-                  blurRadius: 7.0,
-                  offset: Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: CachedNetworkImage(
-                          imageUrl: _categoriesProduct[index].image,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(top: 10),
-                      child: Text(
-                        _categoriesProduct[index].title,
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
+    Future<void> searchProducts(String query) async {
+      setState(() {
+        _currentProducts = _allProducts
+            .where((product) => product.name.toLowerCase().contains(query))
+            .toList()
+          ..sort((a, b) => a.order.compareTo(b.order));
+      });
+    }
 
     final Widget masPedidosList = ListView.builder(
-      itemCount: _categoriesProduct.length,
+      itemCount: _allProducts.length,
       scrollDirection: Axis.horizontal,
       itemBuilder: (context, index) {
         return GestureDetector(
-          onTap: () {
-            print("Presionado");
-            print(_categoriesProduct[index].title);
-            filterProducts(
-                _categoriesProduct[index].uid, _categoriesProduct[index].title);
-          },
+          onTap: () {},
           child: Container(
-            // height: MediaQuery.of(context).size.height * 0.09,
-            margin: const EdgeInsets.only(right: 15),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: Colors.white,
-              boxShadow: const [
-                BoxShadow(
-                  color: shadowColor,
-                  blurRadius: 7.0,
-                  offset: Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: CachedNetworkImage(
-                          imageUrl: _categoriesProduct[index].image,
-                        ),
+            width: MediaQuery.of(context).size.width * 0.35,
+            child: Card(
+              clipBehavior: Clip.antiAlias,
+              // height: MediaQuery.of(context).size.height * 0.09,
+              margin: const EdgeInsets.only(right: 20),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Expanded(
+                    child: Image.network(
+                      _allProducts[index].image,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Container(
+                    height: 50,
+                    padding: const EdgeInsets.all(7.0),
+                    child: Center(
+                      child: Text(
+                        _allProducts[index].name,
+                        style: Theme.of(context).textTheme.bodyText1,
+                        textAlign: TextAlign.center,
                       ),
-                    ],
+                    ),
                   ),
-                ),
-                Container(
-                  margin: const EdgeInsets.all(10),
-                  child: Text(
-                    _categoriesProduct[index].title,
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );
@@ -190,7 +138,7 @@ class _ProductListState extends State<ProductList> {
       backgroundColor: linesColor,
       appBar: const AppBarWidget(
         appBarText: 'Menú',
-        appbackgroundColor: linesColor,
+        appbackgroundColor: mainCTAColor,
       ),
       body: FutureBuilder(
         future: getProducts(),
@@ -200,192 +148,197 @@ class _ProductListState extends State<ProductList> {
           } else if (data.hasData) {
             return ListView(
               children: [
-                Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.85,
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Search',
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Color(0xfff9fafb), width: 1),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(5),
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Color(0xfff9fafb), width: 1),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(5),
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Color(0xfff9fafb), width: 1),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(5),
-                          ),
-                        ),
-                        suffixIcon: Icon(
-                          Icons.search,
-                          color: mainCTAColor,
-                        ),
-                      ),
+                Container(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [mainCTAColor, Color(0xfff78b63)],
                     ),
                   ),
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 40,
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      child: DropdownButtonFormField(
+                  child: Column(
+                    children: [
+                      Align(
                         alignment: Alignment.center,
-                        iconSize: 20,
-                        style: const TextStyle(fontSize: 15, color: colorText1),
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.only(right: 3),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Color(0xfff9fafb), width: 1),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Color(0xfff9fafb), width: 1),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          border: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Color(0xfff9fafb), width: 1),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          prefixIcon: const Padding(
-                            padding: EdgeInsetsDirectional.all(0.0),
-                            child: Icon(Icons.location_on_outlined,
-                                color: colorText1, size: 20),
-                          ),
-                          prefixIconConstraints:
-                              const BoxConstraints(maxWidth: 30, minWidth: 30),
-                          filled: true,
-                          fillColor: const Color(0xfff9fafb),
-                        ),
-                        icon: const Icon(Icons.arrow_drop_down,
-                            color: colorText1, size: 20),
-                        dropdownColor: const Color(0xfff9fafb),
-                        value: selectedValue,
-                        onChanged: (String? newValue) {
-                          setState(
-                            () {
-                              selectedValue = newValue!;
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.85,
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          child: TextFormField(
+                            onChanged: (String query) {
+                              print(query);
+                              searchProducts(query);
                             },
-                          );
-                        },
-                        items: dropdownItems,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Container(
-                      height: 40,
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      child: DropdownButtonFormField(
-                        alignment: Alignment.center,
-                        iconSize: 20,
-                        style: const TextStyle(fontSize: 15, color: colorText1),
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.only(right: 3),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Color(0xfff9fafb), width: 1),
-                            borderRadius: BorderRadius.circular(5),
+                            decoration: const InputDecoration(
+                              labelText: 'Search',
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.never,
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Color(0xfff9fafb), width: 1),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(5),
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Color(0xfff9fafb), width: 1),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(5),
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Color(0xfff9fafb), width: 1),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(5),
+                                ),
+                              ),
+                              suffixIcon: Icon(
+                                Icons.search,
+                                color: mainCTAColor,
+                              ),
+                            ),
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Color(0xfff9fafb), width: 1),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          border: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Color(0xfff9fafb), width: 1),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          prefixIcon: const Padding(
-                            padding: EdgeInsetsDirectional.all(0.0),
-                            child: Icon(Icons.attach_money,
-                                color: colorText1, size: 20),
-                          ),
-                          prefixIconConstraints:
-                              const BoxConstraints(maxWidth: 30, minWidth: 30),
-                          filled: true,
-                          fillColor: const Color(0xfff9fafb),
                         ),
-                        icon: const Icon(Icons.arrow_drop_down,
-                            color: colorText1, size: 20),
-                        dropdownColor: const Color(0xfff9fafb),
-                        value: selectedValue,
-                        onChanged: (String? newValue) {
-                          setState(
-                            () {
-                              selectedValue = newValue!;
-                            },
-                          );
-                        },
-                        items: dropdownItems,
                       ),
-                    ),
-                  ],
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.85,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 40,
+                              width: MediaQuery.of(context).size.width * 0.35,
+                              child: DropdownButtonFormField(
+                                alignment: Alignment.center,
+                                iconSize: 20,
+                                style: const TextStyle(
+                                    fontSize: 15, color: colorText1),
+                                decoration: InputDecoration(
+                                  contentPadding:
+                                      const EdgeInsets.only(right: 3),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        color: Color(0xfff9fafb), width: 1),
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        color: Color(0xfff9fafb), width: 1),
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        color: Color(0xfff9fafb), width: 1),
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  prefixIcon: const Padding(
+                                    padding: EdgeInsetsDirectional.all(0.0),
+                                    child: Icon(Icons.attach_money,
+                                        color: colorText1, size: 20),
+                                  ),
+                                  prefixIconConstraints: const BoxConstraints(
+                                      maxWidth: 30, minWidth: 30),
+                                  filled: true,
+                                  fillColor: const Color(0xfff9fafb),
+                                ),
+                                icon: const Icon(Icons.arrow_drop_down,
+                                    color: colorText1, size: 20),
+                                dropdownColor: const Color(0xfff9fafb),
+                                value: selectedPriceValue,
+                                onChanged: (String? newValue) {
+                                  setState(
+                                    () {
+                                      selectedPriceValue = newValue!;
+                                    },
+                                  );
+                                },
+                                items: dropdownPrices,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Container(
+                                height: 40,
+                                // width: MediaQuery.of(context).size.width * 0.45,
+                                child: DropdownButtonFormField(
+                                  alignment: Alignment.center,
+                                  iconSize: 20,
+                                  style: const TextStyle(
+                                      fontSize: 15, color: colorText1),
+                                  decoration: InputDecoration(
+                                    contentPadding:
+                                        const EdgeInsets.only(right: 3),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          color: Color(0xfff9fafb), width: 1),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          color: Color(0xfff9fafb), width: 1),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          color: Color(0xfff9fafb), width: 1),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    prefixIcon: const Padding(
+                                      padding: EdgeInsetsDirectional.all(0.0),
+                                      child: Icon(Icons.av_timer,
+                                          color: colorText1, size: 20),
+                                    ),
+                                    prefixIconConstraints: const BoxConstraints(
+                                        maxWidth: 30, minWidth: 30),
+                                    filled: true,
+                                    fillColor: const Color(0xfff9fafb),
+                                  ),
+                                  icon: const Icon(Icons.arrow_drop_down,
+                                      color: colorText1, size: 20),
+                                  dropdownColor: const Color(0xfff9fafb),
+                                  value: selectedCategoryValue,
+                                  onChanged: (String? newValue) {
+                                    setState(
+                                      () {
+                                        selectedCategoryValue = newValue!;
+
+                                        filterProducts(selectedCategoryValue);
+                                      },
+                                    );
+                                  },
+                                  items: categoryItems,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 20),
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 0, horizontal: 25),
-                  child: Text("Elegir por categoria",
+                  child: Text('Más populares',
                       style: Theme.of(context).textTheme.headline2),
                 ),
-                const SizedBox(height: 11),
-                Container(
-                    margin: const EdgeInsets.only(left: 20),
-                    height: MediaQuery.of(context).size.height * 0.20,
-                    child: categoriesList),
-                const SizedBox(height: 15),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 0, horizontal: 25),
-                  child: Row(
-                    children: [
-                      Text('Más pedidos ',
-                          style: Theme.of(context).textTheme.labelMedium),
-                      Text(categoryTitle,
-                          style: Theme.of(context).textTheme.headline2),
-                    ],
-                  ),
-                ),
                 const SizedBox(height: 15),
                 Container(
                     margin: const EdgeInsets.only(left: 20),
-                    height: MediaQuery.of(context).size.height * 0.20,
+                    height: MediaQuery.of(context).size.height * 0.22,
                     child: masPedidosList),
                 const SizedBox(height: 15),
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 0, horizontal: 25),
-                  child: Row(
-                    children: [
-                      Text('Todo ',
-                          style: Theme.of(context).textTheme.labelMedium),
-                      Text(categoryTitle,
-                          style: Theme.of(context).textTheme.headline2),
-                    ],
-                  ),
+                  child: Text('Resultados',
+                      style: Theme.of(context).textTheme.headline2),
                 ),
                 const SizedBox(height: 9),
                 Padding(
@@ -397,53 +350,66 @@ class _ProductListState extends State<ProductList> {
                     itemCount: _currentProducts.length,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2, crossAxisSpacing: 10),
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10),
                     itemBuilder: (ctx, index) {
-                      return Card(
-                        elevation: 10,
-                        shadowColor: shadowColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: Container(
-                                width: double.infinity,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.13,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: CachedNetworkImageProvider(
-                                      _currentProducts[index].image,
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ProductPage(
+                                  productModel: _currentProducts[index]),
+                            ),
+                          );
+                        },
+                        child: Card(
+                          elevation: 10,
+                          shadowColor: shadowColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  width: double.infinity,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.13,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: CachedNetworkImageProvider(
+                                        _currentProducts[index].image,
+                                      ),
                                     ),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(15.0)),
                                   ),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(20.0)),
                                 ),
                               ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.symmetric(vertical: 10),
-                              child: Text(
-                                  'S/.${_currentProducts[index].price.toString()}',
-                                  style: Theme.of(context).textTheme.caption),
-                            ),
-                            Text(
-                              _currentProducts[index].name,
-                              style: Theme.of(context).textTheme.bodyText1,
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(bottom: 10),
-                              child: Text(
-                                _currentProducts[index].description,
-                                style: Theme.of(context).textTheme.bodyText2,
+                              Container(
+                                margin:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                child: Text(
+                                    'S/.${_currentProducts[index].price.toString()}',
+                                    style: Theme.of(context).textTheme.caption),
                               ),
-                            ),
-                          ],
+                              Text(
+                                _currentProducts[index].name,
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 10),
+                                child: Text(
+                                  _currentProducts[index].description,
+                                  style: Theme.of(context).textTheme.bodyText2,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     },

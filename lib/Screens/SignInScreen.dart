@@ -69,7 +69,7 @@ class _SignInPageState extends State<SignInPage> {
         _isLoading = false;
       });
 
-      Provider.of<ValueNotifier<int>>(context, listen: false).value = 2;
+      Provider.of<ValueNotifier<int>>(context, listen: false).value = 1;
     } else {
       setState(() {
         _isLoading = false;
