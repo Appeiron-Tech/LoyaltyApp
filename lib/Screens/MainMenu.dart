@@ -54,11 +54,8 @@ class _HomePageState extends State<MainMenu> {
               Container(
                 child: InkWell(
                   onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => ProductList(),
-                      ),
-                    );
+                    Provider.of<ValueNotifier<int>>(context, listen: false)
+                        .value = 1;
                   },
                   child: Container(
                     padding: const EdgeInsets.all(10),

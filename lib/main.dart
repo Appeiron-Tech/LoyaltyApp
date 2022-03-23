@@ -6,6 +6,7 @@ import 'package:testing/Screens/GamifyProgram.dart';
 import 'package:testing/Screens/HomeScreen.dart';
 import 'package:testing/Screens/MainMenu.dart';
 import 'package:testing/Screens/OnboardingScreen.dart';
+import 'package:testing/Screens/ProductList.dart';
 import 'package:testing/Screens/UserScreen.dart';
 import 'package:testing/Screens/WelcomePage.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -133,15 +134,14 @@ class MyNavigationBar extends StatefulWidget {
 
 class _MyNavigationBarState extends State<MyNavigationBar> {
   final List<Widget> _children = [
-    // const HomePage(),
     const MainMenu(),
-    GamifyProgram(),
+    ProductList(),
+    const GamifyProgram(),
     const UserPage(),
   ];
 
   void OnTappedBar(int index) {
     Provider.of<ValueNotifier<int>>(context, listen: false).value = index;
-    print(index);
   }
 
   @override
@@ -174,10 +174,13 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
             currentIndex: Provider.of<ValueNotifier<int>>(context).value,
             items: const [
               BottomNavigationBarItem(icon: Icon(Icons.home), label: "Inicio"),
-              // BottomNavigationBarItem(
-              //     icon: Icon(Icons.favorite), label: "Restaurant"),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.shopping_cart), label: "Game"),
+                  icon: Icon(Icons.restaurant_menu_outlined), label: "Menu"),
+              BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.emoji_events_outlined,
+                  ),
+                  label: "Premios"),
               BottomNavigationBarItem(
                   icon: Icon(Icons.person), label: "Profile"),
             ],
