@@ -49,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  void loginUserGoogle() async {
+  void loginUserGoogle(BuildContext _context) async {
     setState(() {
       _isLoading = true;
     });
@@ -58,11 +58,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (res == 'Logeado con Google') {
       // ir a otra pagina
-      Provider.of<ValueNotifier<int>>(context, listen: false).value = 2;
+      Provider.of<ValueNotifier<int>>(_context, listen: false).value = 2;
+      // ValueNotifier<int> a =
+      //     Provider.of<ValueNotifier<int>>(context, listen: false);
+      // a.value = 2;
+
+      print('se logueó');
       setState(() {
         _isLoading = false;
       });
     } else {
+      print('not working');
       setState(() {
         _isLoading = false;
       });
@@ -123,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: SignInButton(
                         Buttons.Google,
                         text: "Ingresa con Google",
-                        onPressed: loginUserGoogle,
+                        onPressed: () => loginUserGoogle(context),
                         elevation: 2,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30.0),

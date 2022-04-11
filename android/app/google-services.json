@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1008891094706-fh533mct9uk95he33gu8vlj7q85aoekc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "appeiron.tech.testing",
+            "certificate_hash": "9d22a530af5039d2239324f1da2483c684799ac0"
+          }
+        },
+        {
           "client_id": "1008891094706-hlur6282flu4d8bdfqr24hoo9sul5kan.apps.googleusercontent.com",
           "client_type": 3
         }

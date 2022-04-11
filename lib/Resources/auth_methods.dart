@@ -116,6 +116,8 @@ class AuthMethods {
         if (result != null) {
           res = 'Logeado con Google';
         } //
+      } else {
+        print('murio');
       }
     } catch (e) {
       return e.toString();
